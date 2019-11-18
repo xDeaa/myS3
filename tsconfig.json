@@ -9,7 +9,7 @@
     "strict": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
-    "outDir": ".dist"
+    "outDir": "dist"
   },
   "include": ["src", "types.d.ts"],
   "exclude": [

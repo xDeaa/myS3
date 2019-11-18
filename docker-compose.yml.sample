@@ -2,29 +2,28 @@
 # Change the configuration values and then you can use it to locally deploy the app in the debug container
 version: "3"
 services:
-  mysql:
-    image: mysql:5
-    container_name: mysql
+  my_mysql:
+    image: mysql:8
     ports:
       - 3306:3306
-    expose:
-      - 3306
     environment:
       MYSQL_DATABASE: myS3
       MYSQL_USER: myS3User
       MYSQL_PASSWORD: myS3Password
       MYSQL_ROOT_PASSWORD: pass
-
+    
   my_s3:
     build: .
     ports:
       - 80:80
+    links:
+      - my_mysql:mysql
     environment:
       PORT: 80
       MYSQL_HOST: mysql
       MYSQL_BASE: myS3
       MYSQL_USER: myS3User
-      MYSQL_PASS: pass
+      MYSQL_PASS: myS3Password
       MYSQL_PORT: 3306
-      APP_ENV: "dev" # dev, prod
-      APP_LOG_LEVEL: "info" # trace, debug, info, warn, error, fatal
+      APP_ENV: "dev"
+      APP_LOG_LEVEL: "info"

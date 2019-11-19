@@ -8,13 +8,13 @@ export default class UserController {
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
-        const { data, err } = Validation.Data(req)
+        const { err } = Validation.Data(req)
         if (err) {
             return next(err)
         }
 
         return new ResponseData(200, {
-            hello: data.queryData.name,
+            hello: req.query.name,
         }).sendJson(res)
     }
 }

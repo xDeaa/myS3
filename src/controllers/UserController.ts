@@ -14,7 +14,7 @@ export default class UserController {
         }
 
         return new ResponseData(200, {
-            hello: req.query.name,
+            hello: req.query.uuid,
         }).sendJson(res)
     }
 }

@@ -5,27 +5,27 @@ export class User {
     @PrimaryColumn({
         nullable: false,
         unique: true,
-        type: "varchar"
+        type: 'varchar',
     })
     uuid: string
-    
+
     @Column({
         nullable: false,
         unique: true,
-        type: "varchar"
+        type: 'varchar',
     })
     nickname: string
-    
+
     @Column({
         nullable: false,
         unique: true,
-        type: "varchar"
+        type: 'varchar',
     })
     email: string
-    
-    @Column({ 
+
+    @Column({
         nullable: false,
-        type: "varchar"
+        type: 'varchar',
     })
     password: string
 }

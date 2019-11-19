@@ -5,6 +5,7 @@ import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOpti
 import { Logger } from './controllers/Logger'
 import entities from './entities'
 import { RouteBuilder } from './routes/RouterBuilder'
+import "reflect-metadata"
 
 // Init variables ENVs
 dotenv.config()
@@ -38,6 +39,7 @@ const typeOrmConfig: MysqlConnectionOptions = {
     port: parseInt(MYSQL_PORT, 10),
     database: MYSQL_BASE,
     entities: Object.values(entities),
+    synchronize: true
 }
 createConnection(typeOrmConfig)
     .then(() => {

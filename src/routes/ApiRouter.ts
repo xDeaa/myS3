@@ -1,13 +1,12 @@
+import { handleAuth, handleNotAuth } from './../middlewares/common'
 import { BaseRoute } from '../models/Route/BaseRoute'
 import UserRoutes from './User'
-import Loginroutes from './Login'
-import RegisterRoutes from './Register'
+import AuthRoutes from './Auth'
 
 class ApiRoutes extends BaseRoute {
     public initializeRoutes(): void {
-        this.router.use('/user', UserRoutes)
-        this.router.use('/login', Loginroutes)
-        this.router.use('/register', RegisterRoutes)
+        this.router.use('/users', handleAuth, UserRoutes)
+        this.router.use('/auth', handleNotAuth, AuthRoutes)
     }
 }
 

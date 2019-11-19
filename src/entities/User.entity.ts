@@ -28,4 +28,12 @@ export class User {
         type: 'varchar',
     })
     password: string
+
+    toJSON = (): Record<string, string> => {
+        return {
+            uuid: this.uuid,
+            nickname: this.nickname,
+            email: this.email,
+        }
+    }
 }

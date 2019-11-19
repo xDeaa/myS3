@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { Column, Entity, PrimaryColumn, BaseEntity } from 'typeorm'
 
 @Entity('user')
-export class User {
+export class User extends BaseEntity {
     @PrimaryColumn({
         nullable: false,
         unique: true,
@@ -28,4 +28,12 @@ export class User {
         type: 'varchar',
     })
     password: string
+
+    toJSON = (): Record<string, string> => {
+        return {
+            uuid: this.uuid,
+            nickname: this.nickname,
+            email: this.email,
+        }
+    }
 }

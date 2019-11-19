@@ -27,6 +27,7 @@
     "yarn": ">=1.19.x"
   },
   "dependencies": {
+    "@babel/runtime": "^7.7.2",
     "@types/compression": "^1.0.1",
     "compression": "^1.7.4",
     "dotenv": "^8.2.0",
@@ -42,6 +43,7 @@
     "@babel/core": "^7.6.4",
     "@babel/node": "^7.6.3",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-typescript": "^7.7.2",
     "@mhirba/eslint-config-base": "^1.4.2",

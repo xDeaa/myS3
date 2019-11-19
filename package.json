@@ -14,7 +14,8 @@
     "lint": "yarn eslint src/*.ts* src/**/*.ts* --fix",
     "dev": "yarn nodemon",
     "build": "yarn lint && yarn babel src/ --out-dir dist/ --extensions \".ts\" --source-maps inline --quiet --copy-files",
-    "clean": "yarn rimraf dist"
+    "clean": "yarn rimraf dist",
+    "docker": "docker-compose up -d --build"
   },
   "husky": {
     "hooks": {

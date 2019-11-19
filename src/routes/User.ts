@@ -2,6 +2,7 @@ import UserController from '../controllers/UserController'
 import { BaseRoute } from '../models'
 import { UserValidation } from '../controllers/Validation/UserValidation'
 import { AuthValidation } from '../controllers/Validation/AuthValidation'
+import { handleError } from '../middlewares/common'
 
 class UserRoutes extends BaseRoute {
     public initializeRoutes(): void {
@@ -10,19 +11,27 @@ class UserRoutes extends BaseRoute {
             '/:uuid',
             AuthValidation.Connected,
             UserValidation.UserParameter,
+            handleError,
             UserController.getUser,
         )
-        this.router.post('/', UserValidation.Create, UserController.createUser)
+        this.router.post(
+            '/',
+            UserValidation.Create,
+            handleError,
+            UserController.createUser,
+        )
         this.router.put(
             '/:uuid',
             AuthValidation.Connected,
             UserValidation.Update,
+            handleError,
             UserController.updateUser,
         )
         this.router.delete(
             '/:uuid',
             AuthValidation.Connected,
             UserValidation.UserParameter,
+            handleError,
             UserController.deleteUser,
         )
     }

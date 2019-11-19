@@ -25,7 +25,7 @@ export class UserValidation {
         },
         password: {
             in: ['body'],
-            errorMessage: 'password is not a valid String',
+            errorMessage: 'password must have at least 6 characters',
             isString: true,
             isLength: {
                 options: { min: 6 },
@@ -56,7 +56,7 @@ export class UserValidation {
         },
         password: {
             in: ['body'],
-            errorMessage: 'password is not a valid String',
+            errorMessage: 'password must have at least 6 characters',
             isString: true,
             optional: true,
             isLength: {

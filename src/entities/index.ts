@@ -1,9 +1,7 @@
-import { User } from './User.entity';
+import { User } from './User.entity'
 
-export {
-    User
-}
+export { User }
 
 export default {
-    User
+    User,
 }

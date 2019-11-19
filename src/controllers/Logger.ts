@@ -1,4 +1,4 @@
-import { log } from 'logfmt'
+import logfmt from 'logfmt'
 
 export class Logger {
     public static traceLog(
@@ -83,6 +83,6 @@ export class Logger {
         if (code !== undefined) {
             objectLog.code = code
         }
-        console.log(JSON.stringify(objectLog))
+        logfmt.log(objectLog, process.stdout)
     }
 }

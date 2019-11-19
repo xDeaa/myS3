@@ -22,11 +22,11 @@ export class Validation {
             return { err }
         }
 
-        req.body = matchedData(req, { locations: ['body'] });
-        req.query = matchedData(req, { locations: ['query'] });
-        req.params = matchedData(req, { locations: ['params'] });
-        req.headers = matchedData(req, { locations: ['headers'] });
-        req.cookies = matchedData(req, { locations: ['cookies'] });
+        req.body = matchedData(req, { locations: ['body'] })
+        req.query = matchedData(req, { locations: ['query'] })
+        req.params = matchedData(req, { locations: ['params'] })
+        req.headers = matchedData(req, { locations: ['headers'] })
+        req.cookies = matchedData(req, { locations: ['cookies'] })
 
         return { err: null }
     }

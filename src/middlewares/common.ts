@@ -1,4 +1,4 @@
-import { Logger } from './../controllers/Logger';
+import { Logger } from './../controllers/Logger'
 import parser from 'body-parser'
 import compression from 'compression'
 import { Router, Request, Response, NextFunction } from 'express'

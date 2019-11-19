@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
-import { ResponseData } from './../models'
+import { ResponseData } from '../models'
 import { Validation } from './Validation/Validation'
 
-export default class HelloController {
-    public static getHello = async (
+export default class UserController {
+    public static getUser = async (
         req: Request,
         res: Response,
         next: NextFunction,

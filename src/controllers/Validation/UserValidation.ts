@@ -1,14 +1,13 @@
 import { checkSchema, ValidationChain } from 'express-validator'
 
 export class UserValidation {
-
     public static UserParameter: ValidationChain[] = checkSchema({
         uuid: {
             in: ['params'],
             errorMessage: 'uuid is not a valid UUID',
             isUUID: true,
         },
-    });
+    })
 
     public static Create: ValidationChain[] = checkSchema({
         nickname: {
@@ -64,5 +63,5 @@ export class UserValidation {
                 options: { min: 6 },
             },
         },
-    });
+    })
 }

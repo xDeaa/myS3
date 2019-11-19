@@ -7,7 +7,7 @@ export class AuthValidation {
             errorMessage: 'You must be connected',
             isJWT: true,
         },
-    });
+    })
 
     public static NotConnected: ValidationChain[] = checkSchema({
         authorization: {
@@ -15,9 +15,9 @@ export class AuthValidation {
             errorMessage: 'You are already connected',
             exists: {
                 options: {
-                    checkNull: true
-                }
+                    checkNull: true,
+                },
             },
         },
-    });
+    })
 }

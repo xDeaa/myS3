@@ -38,7 +38,7 @@ const typeOrmConfig: MysqlConnectionOptions = {
     port: parseInt(MYSQL_PORT, 10),
     database: MYSQL_BASE,
     entities: Object.values(entities),
-    insecureAuth: false,
+    insecureAuth: true,
 }
 createConnection(typeOrmConfig)
     .then(() => {

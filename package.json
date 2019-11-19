@@ -27,8 +27,6 @@
     "yarn": ">=1.19.x"
   },
   "dependencies": {
-    "@babel/runtime": "^7.7.2",
-    "@types/compression": "^1.0.1",
     "compression": "^1.7.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -39,6 +37,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.7.2",
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/node": "^7.6.3",
@@ -53,6 +52,7 @@
     "@types/jest": "^24.0.20",
     "@types/logfmt": "^1.2.1",
     "@types/node": "^12.11.7",
+    "@types/compression": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "babel-jest": "^24.9.0",

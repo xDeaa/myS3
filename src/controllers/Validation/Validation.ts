@@ -13,35 +13,22 @@ export class Validation {
         )
 
         if (!errors.isEmpty()) {
-            const errorObject: ResponseError = new ResponseError(
+            const err: ResponseError = new ResponseError(
                 400,
                 'error_invalid_parameter',
                 'Parameters invalid: ' + JSON.stringify(errors.mapped()),
                 JSON.stringify(errors.array()),
             )
-            const defaultData: Record<string, any> = {}
-            return {
-                err: errorObject,
-                data: {
-                    bodyData: defaultData,
-                    queryData: defaultData,
-                    paramsData: defaultData,
-                    headersData: defaultData,
-                    cookiesData: defaultData,
-                },
-            }
+            return { err }
         }
 
-        return {
-            data: {
-                bodyData: matchedData(req, { locations: ['body'] }),
-                queryData: matchedData(req, { locations: ['query'] }),
-                paramsData: matchedData(req, { locations: ['params'] }),
-                headersData: matchedData(req, { locations: ['headers'] }),
-                cookiesData: matchedData(req, { locations: ['cookies'] }),
-            },
-            err: null,
-        }
+        req.body = matchedData(req, { locations: ['body'] });
+        req.query = matchedData(req, { locations: ['query'] });
+        req.params = matchedData(req, { locations: ['params'] });
+        req.headers = matchedData(req, { locations: ['headers'] });
+        req.cookies = matchedData(req, { locations: ['cookies'] });
+
+        return { err: null }
     }
 
     public static errorFormatter(error: ValidationError) {

@@ -1,5 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm'
-import { User } from './User.entity';
+import {
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
+    ManyToMany,
+    JoinTable,
+} from 'typeorm'
+import { User } from './User.entity'
 
 @Entity('bucket')
 export class Bucket {
@@ -13,11 +19,15 @@ export class Bucket {
     })
     name: string
 
-    @ManyToMany(type => User, user => user.buckets, {
-        cascade: true
-    })
+    @ManyToMany(
+        type => User,
+        user => user.buckets,
+        {
+            cascade: true,
+        },
+    )
     @JoinTable()
-    user: User;
+    user: User
 
     toJSON = (): Record<string, string | User> => {
         return {

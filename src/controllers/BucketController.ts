@@ -25,7 +25,7 @@ export default class UserController {
         req: Request,
         res: Response,
     ): Promise<void> => {
-        const { name, user} = req.body
+        const { name, user } = req.body
         const bucker = await BucketService.saveBucket(name, user)
 
         return new ResponseData(200, { bucker }).sendJson(res)

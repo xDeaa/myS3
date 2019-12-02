@@ -1,7 +1,6 @@
 import { checkSchema, ValidationChain } from 'express-validator'
 
 export class BucketValidation {
-
     public static FieldsNecessary: ValidationChain[] = checkSchema({
         uuid: {
             in: ['params'],

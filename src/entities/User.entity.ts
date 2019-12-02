@@ -30,8 +30,11 @@ export class User {
     })
     password: string
 
-    @ManyToMany(type => Bucket, bucket => bucket.user)
-    buckets: Bucket[];
+    @ManyToMany(
+        type => Bucket,
+        bucket => bucket.user,
+    )
+    buckets: Bucket[]
 
     toJSON = (): Record<string, string | Bucket[]> => {
         return {

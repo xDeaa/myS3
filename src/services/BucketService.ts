@@ -7,10 +7,7 @@ export class BucketService {
      * @param name name of the new bucket
      * @param user user of the new user
      */
-    public static async saveBucket(
-        name: string,
-        user: User,
-    ): Promise<Bucket> {
+    public static async saveBucket(name: string, user: User): Promise<Bucket> {
         const bucket: Bucket = new Bucket()
         bucket.name = name
         bucket.user = user

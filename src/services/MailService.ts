@@ -4,7 +4,11 @@ export default class MailService {
     /**
      * Send an email
      */
-    private static async sendEmail(to: string, subject: string, body: string): Promise<void> {
+    private static async sendEmail(
+        to: string,
+        subject: string,
+        body: string,
+    ): Promise<void> {
         // Generate test SMTP service account from ethereal.email
         // Only needed if you don't have a real mail account for testing
         const testAccount = await nodemailer.createTestAccount()
@@ -39,7 +43,10 @@ export default class MailService {
     /**
      * Send user email creation
      */
-    public static async sendUserEmailCreation(nickname: string, email: string): Promise<void> {
+    public static async sendUserEmailCreation(
+        nickname: string,
+        email: string,
+    ): Promise<void> {
         return MailService.sendEmail(
             email,
             'Account creation',

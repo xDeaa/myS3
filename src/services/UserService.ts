@@ -1,8 +1,11 @@
-import { hashPassword } from './../utils/Utils';
+import { hashPassword } from './../utils/Utils'
 import { getManager } from 'typeorm'
 import uuid from 'uuid'
 import { User } from '../entities'
-import { AlreadyUserExistsException, UserNotExistsException } from '../models/Exception'
+import {
+    AlreadyUserExistsException,
+    UserNotExistsException,
+} from '../models/Exception'
 
 export default class UserService {
     /**
@@ -24,12 +27,11 @@ export default class UserService {
             .findOne(uuid)
 
         if (!userFound) {
-            throw new UserNotExistsException();
+            throw new UserNotExistsException()
         }
 
         return userFound
     }
-
 
     /**
      * Delete a specific user
@@ -41,23 +43,30 @@ export default class UserService {
             .findOne(uuid)
 
         if (!userFound) {
-            throw new UserNotExistsException();
+            throw new UserNotExistsException()
         }
 
-        await getManager().getRepository(User).delete(uuid)
+        await getManager()
+            .getRepository(User)
+            .delete(uuid)
     }
 
     /**
      * Update a specific user
      * @param uuid UUID of the user to update
      */
-    public static async updateUser(uuid: string, nickname: string, email: string, password: string): Promise<User> {
+    public static async updateUser(
+        uuid: string,
+        nickname: string,
+        email: string,
+        password: string,
+    ): Promise<User> {
         const userFound = await getManager()
             .getRepository(User)
             .findOne(uuid)
 
         if (!userFound) {
-            throw new UserNotExistsException();
+            throw new UserNotExistsException()
         }
 
         if (nickname) {
@@ -70,7 +79,9 @@ export default class UserService {
             userFound.password = await hashPassword(password)
         }
 
-        return getManager().getRepository(User).save(userFound)
+        return getManager()
+            .getRepository(User)
+            .save(userFound)
     }
 
     /**

@@ -1,7 +1,7 @@
 import { getManager } from 'typeorm'
 import { User, Bucket } from '../entities'
 
-export class BucketService {
+export default class BucketService {
     /**
      * Save a new Bucket
      * @param name name of the new bucket

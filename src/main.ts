@@ -40,6 +40,7 @@ const typeOrmConfig: MysqlConnectionOptions = {
     database: MYSQL_BASE,
     entities: Object.values(entities),
     synchronize: true,
+    insecureAuth: true,
 }
 createConnection(typeOrmConfig)
     .then(() => {

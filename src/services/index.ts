@@ -1,3 +1,4 @@
-import { UserService } from './UserService'
+import UserService from './UserService'
+import MailService from './MailService'
 
-export { UserService }
+export { UserService, MailService }

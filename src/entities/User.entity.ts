@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { Column, Entity, PrimaryColumn, ManyToMany } from 'typeorm'
+import { Bucket } from './Bucket.entity'
 
 @Entity('user')
 export class User {
@@ -29,11 +30,15 @@ export class User {
     })
     password: string
 
-    toJSON = (): Record<string, string> => {
+    @ManyToMany(type => Bucket, bucket => bucket.user)
+    buckets: Bucket[];
+
+    toJSON = (): Record<string, string | Bucket[]> => {
         return {
             uuid: this.uuid,
             nickname: this.nickname,
             email: this.email,
+            buckets: this.buckets,
         }
     }
 }

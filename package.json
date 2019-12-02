@@ -2,7 +2,7 @@
   "name": "starter-efrei",
   "version": "1.0.0",
   "description": "Hello Efrei",
-  "author": "Majdi Toumi <majdi@mhirba.com> (http://mhirba.com)",
+  "author": "Andrea Serrano, Jean-Charles Moussé",
   "license": "MIT",
   "private": true,
   "main": "dist/main.js",
@@ -15,7 +15,8 @@
     "dev": "yarn nodemon",
     "build": "yarn lint && yarn babel src/ --out-dir dist/ --extensions \".ts\" --source-maps inline --quiet --copy-files",
     "clean": "yarn rimraf dist",
-    "docker": "docker-compose up -d --build"
+    "docker": "docker-compose up -d --build",
+    "logs": "docker-compose logs"
   },
   "husky": {
     "hooks": {

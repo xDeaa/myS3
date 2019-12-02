@@ -1,11 +1,10 @@
 import UserController from '../controllers/UserController'
 import { BaseRoute } from '../models'
-import { UserValidation } from '../controllers/Validation'
+import { UserValidation, BucketValidation } from '../controllers/Validation'
 import { handleError } from '../middlewares/common'
 
-class UserRoutes extends BaseRoute {
+class BucketRoutes extends BaseRoute {
     public initializeRoutes(): void {
-        this.router.get('/', UserController.getUsers)
         this.router.get(
             '/:uuid',
             UserValidation.UserParameter,
@@ -14,17 +13,17 @@ class UserRoutes extends BaseRoute {
         )
         this.router.put(
             '/:uuid',
-            UserValidation.Update,
+            BucketValidation.FieldsNecessary,
             handleError,
             UserController.updateUser,
         )
         this.router.delete(
             '/:uuid',
-            UserValidation.UserParameter,
+            BucketValidation.FieldsNecessary,
             handleError,
             UserController.deleteUser,
         )
     }
 }
 
-export default new UserRoutes().router
+export default new BucketRoutes().router

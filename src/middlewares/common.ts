@@ -28,6 +28,7 @@ export const handleError = async (
     }
     next()
 }
+
 const checkJwtPayload = async (
     decodedPayload: string | object,
 ): Promise<boolean> => {

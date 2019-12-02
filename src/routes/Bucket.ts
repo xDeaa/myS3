@@ -1,4 +1,4 @@
-import UserController from '../controllers/UserController'
+import BucketController from '../controllers/BucketController'
 import { BaseRoute } from '../models'
 import { UserValidation, BucketValidation } from '../controllers/Validation'
 import { handleError } from '../middlewares/common'
@@ -9,19 +9,26 @@ class BucketRoutes extends BaseRoute {
             '/:uuid',
             UserValidation.UserParameter,
             handleError,
-            UserController.getUser,
+            BucketController.getObjects,
+        )
+
+        this.router.post(
+            '/:uuid',
+            BucketValidation.FieldsNecessary,
+            handleError,
+            BucketController.createBucket,
         )
         this.router.put(
             '/:uuid',
             BucketValidation.FieldsNecessary,
             handleError,
-            UserController.updateUser,
+            BucketController.updateBucket,
         )
         this.router.delete(
             '/:uuid',
             BucketValidation.FieldsNecessary,
             handleError,
-            UserController.deleteUser,
+            BucketController.deleteBucket,
         )
     }
 }

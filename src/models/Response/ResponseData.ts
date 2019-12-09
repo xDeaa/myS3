@@ -14,7 +14,7 @@ export class ResponseData<T extends object> extends BaseResponse {
     }
 
     public toJSON() {
-        if (!this.data) return null;
+        if (!this.data) return null
         return {
             data: this.data,
         }

@@ -26,7 +26,10 @@ export default class BucketController {
     ): Promise<void> => {
         try {
             const { uuid, id } = req.params
-            const bucket = await BucketService.isBucketExists(uuid, parseInt(id))
+            const bucket = await BucketService.isBucketExists(
+                uuid,
+                parseInt(id),
+            )
 
             return new ResponseData(!bucket ? 400 : 200).sendJson(res)
         } catch (e) {
@@ -56,8 +59,8 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { id } = req.params;
-            const { name } = req.body;
+            const { id } = req.params
+            const { name } = req.body
             const bucket = await BucketService.updateBucket(parseInt(id), name)
             return new ResponseData(200, { bucket }).sendJson(res)
         } catch (e) {
@@ -71,10 +74,12 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { id } = req.params;
+            const { id } = req.params
             await BucketService.deleteBucket(parseInt(id))
 
-            return new ResponseData(200, { msg: "Successfully deleted" }).sendJson(res)
+            return new ResponseData(200, {
+                msg: 'Successfully deleted',
+            }).sendJson(res)
         } catch (e) {
             next(e)
         }

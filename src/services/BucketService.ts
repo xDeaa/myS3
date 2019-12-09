@@ -23,14 +23,17 @@ export default class BucketService {
      * @param user User who own the bucket to retrieve
      * @param id Id of bucket
      */
-    public static async isBucketExists(uuid: string, id: number): Promise<boolean> {
+    public static async isBucketExists(
+        uuid: string,
+        id: number,
+    ): Promise<boolean> {
         const user: User = new User()
         user.uuid = uuid
 
         const bucket = await getManager()
             .getRepository(Bucket)
             .findOne({ id, user })
-        return (bucket) ? true : false;
+        return bucket ? true : false
     }
 
     /**
@@ -38,7 +41,10 @@ export default class BucketService {
      * @param name name of the new bucket
      * @param user User who owns the bucket
      */
-    public static async saveBucket(name: string, uuid: string): Promise<Bucket> {
+    public static async saveBucket(
+        name: string,
+        uuid: string,
+    ): Promise<Bucket> {
         const bucket: Bucket = new Bucket()
         bucket.name = name
 
@@ -59,14 +65,13 @@ export default class BucketService {
             .save(bucket)
     }
 
-
     /**
-    * Update a specific bucket
-    * @param id id of the bucket to update
-    */
+     * Update a specific bucket
+     * @param id id of the bucket to update
+     */
     public static async updateBucket(
         id: number,
-        name: string
+        name: string,
     ): Promise<Bucket> {
         const bucketFound = await getManager()
             .getRepository(Bucket)
@@ -82,7 +87,6 @@ export default class BucketService {
             .getRepository(Bucket)
             .save(bucketFound)
     }
-
 
     /**
      * Delete a bucket

@@ -54,7 +54,9 @@ export default class UserController {
     ): Promise<void> => {
         try {
             await UserService.deleteUser(req.params.uuid)
-            return new ResponseData(200, {msg: "Successfully deleted"}).sendJson(res)
+            return new ResponseData(200, {
+                msg: 'Successfully deleted',
+            }).sendJson(res)
         } catch (e) {
             next(e)
         }

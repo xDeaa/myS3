@@ -1,7 +1,6 @@
 import { checkSchema, ValidationChain } from 'express-validator'
 
 export default class AuthValidation {
-
     public static Create: ValidationChain[] = checkSchema({
         nickname: {
             in: ['body'],

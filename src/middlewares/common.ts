@@ -111,7 +111,7 @@ export const checkUserExists = async (
         // Call getUser, will throw an exception if not exists
         await UserService.getUser(req.params.uuid)
         next()
-     } catch (e) {
-         return next(e)
-     }
+    } catch (e) {
+        return next(e)
+    }
 }

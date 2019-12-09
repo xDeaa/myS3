@@ -20,7 +20,7 @@ export default class AuthController {
                 email,
                 cryptedPass,
             )
-            const rawUser: Object = {
+            const rawUser: Record<string, any> = {
                 uuid: user.uuid,
                 email: user.email,
                 nickname: user.nickname,
@@ -47,7 +47,7 @@ export default class AuthController {
             const { email, password } = req.body
 
             const user: User = await UserService.getUserEmail(email)
-            const isPasswordOk: Boolean = await verifiyPassword(
+            const isPasswordOk: boolean = await verifiyPassword(
                 password,
                 user.password,
             )
@@ -55,7 +55,7 @@ export default class AuthController {
                 throw new EmailOrPasswordWrongException()
             }
 
-            const rawUser: Object = {
+            const rawUser: Record<string, any> = {
                 uuid: user.uuid,
                 email: user.email,
                 nickname: user.nickname,

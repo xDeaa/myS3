@@ -108,7 +108,7 @@ export default class UserService {
         email: string,
         password: string,
     ): Promise<User> {
-        const isExists: Boolean = await UserService.checkUser(nickname, email)
+        const isExists: boolean = await UserService.checkUser(nickname, email)
         if (isExists) {
             throw new AlreadyUserExistsException()
         }

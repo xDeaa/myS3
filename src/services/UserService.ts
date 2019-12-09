@@ -1,5 +1,5 @@
 import { hashPassword } from './../utils/Utils'
-import { getManager } from 'typeorm'
+import { getManager, DeleteResult } from 'typeorm'
 import uuid from 'uuid'
 import { User } from '../entities'
 import {
@@ -23,7 +23,7 @@ export default class UserService {
      * @param uuid UUID of the user to retrieve
      */
     public static async getUser(uuid: string): Promise<User> {
-        const userFound = await getManager()
+        const userFound: User | undefined = await getManager()
             .getRepository(User)
             .findOne(uuid)
 
@@ -39,7 +39,7 @@ export default class UserService {
      * @param email Email of the user to retrieve
      */
     public static async getUserEmail(email: string): Promise<User> {
-        const userFound = await getManager()
+        const userFound: User | undefined = await getManager()
             .getRepository(User)
             .findOne({ email })
 
@@ -55,7 +55,7 @@ export default class UserService {
      * @param uuid UUID of the user to delete
      */
     public static async deleteUser(uuid: string): Promise<void> {
-        const userDeleted = await getManager()
+        const userDeleted: DeleteResult = await getManager()
             .getRepository(User)
             .delete(uuid)
 
@@ -74,7 +74,7 @@ export default class UserService {
         email: string,
         password: string,
     ): Promise<User> {
-        const userFound = await getManager()
+        const userFound: User | undefined = await getManager()
             .getRepository(User)
             .findOne(uuid)
 
@@ -108,7 +108,7 @@ export default class UserService {
         email: string,
         password: string,
     ): Promise<User> {
-        const isExists = await UserService.checkUser(nickname, email)
+        const isExists: Boolean = await UserService.checkUser(nickname, email)
         if (isExists) {
             throw new AlreadyUserExistsException()
         }
@@ -133,11 +133,12 @@ export default class UserService {
         nickname: string,
         email: string,
     ): Promise<boolean> {
-        const countUser = await getManager()
+        const countUser: number = await getManager()
             .getRepository(User)
             .count({
                 where: [{ nickname }, { email }],
             })
+            
         return countUser > 0
     }
 }

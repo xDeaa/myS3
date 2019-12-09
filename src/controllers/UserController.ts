@@ -1,8 +1,6 @@
-import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { ResponseData } from '../models'
-import { UserService, MailService } from '../services'
-import { hashPassword } from '../utils/Utils'
+import { UserService } from '../services'
 
 export default class UserController {
     public static getUsers = async (

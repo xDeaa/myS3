@@ -60,9 +60,9 @@ export const handleAuth = async (
     }
 
     try {
-        const decoded = jwt.verify(req.headers.authorization, 'secretKey')
+        const decoded: string | Object = jwt.verify(req.headers.authorization, 'secretKey')
 
-        const isValidPayload = await checkJwtPayload(decoded)
+        const isValidPayload: Boolean = await checkJwtPayload(decoded)
         if (!isValidPayload) {
             return next(
                 new ResponseError(

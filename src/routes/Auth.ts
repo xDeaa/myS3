@@ -1,7 +1,7 @@
 import { BaseRoute } from '../models'
 import { UserValidation } from '../controllers/Validation'
 import AuthController from '../controllers/AuthController'
-import { handleError, checkUserExists } from '../middlewares/common'
+import { handleError } from '../middlewares/common'
 
 class AuthRoutes extends BaseRoute {
     public initializeRoutes(): void {

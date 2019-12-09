@@ -1,6 +1,6 @@
 import BucketController from '../controllers/BucketController'
 import { BaseRoute } from '../models'
-import { UserValidation, BucketValidation } from '../controllers/Validation'
+import { BucketValidation } from '../controllers/Validation'
 import { handleError } from '../middlewares/common'
 
 class BucketRoutes extends BaseRoute {

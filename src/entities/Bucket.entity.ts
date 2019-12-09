@@ -1,10 +1,4 @@
-import {
-    Column,
-    Entity,
-    PrimaryGeneratedColumn,
-    JoinTable,
-    ManyToOne,
-} from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 import { User } from './User.entity'
 
 @Entity('bucket')
@@ -18,16 +12,12 @@ export class Bucket {
     })
     name: string
 
-    @ManyToOne(
-        type => User,
-        user => user.buckets,
-        {
-            cascade: true,
-        },
-    )
+    @ManyToOne(user => user.buckets, {
+        cascade: true,
+    })
     user: User
 
-    toJSON = (): Record<string, any> => {
+    toJSON = (): Record<string, string | number> => {
         return {
             id: this.id,
             name: this.name,

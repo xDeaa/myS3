@@ -4,6 +4,7 @@ import { ResponseData } from '../models'
 import { UserService, MailService } from '../services'
 import { verifiyPassword, hashPassword } from '../utils/Utils'
 import { EmailOrPasswordWrongException } from '../models/Exception'
+import { User } from '../entities'
 
 export default class AuthController {
     public static createUser = async (
@@ -14,18 +15,18 @@ export default class AuthController {
         const { nickname, email, password } = req.body
         const cryptedPass = await hashPassword(password)
         try {
-            const user = await UserService.saveUser(
+            const user: User = await UserService.saveUser(
                 nickname,
                 email,
                 cryptedPass,
             )
-            const rawUser = {
+            const rawUser: Object = {
                 uuid: user.uuid,
                 email: user.email,
                 nickname: user.nickname,
             }
 
-            const token = jwt.sign(
+            const token: string = jwt.sign(
                 { uuid: user.uuid, password: user.password },
                 'secretKey',
             )
@@ -45,19 +46,19 @@ export default class AuthController {
         try {
             const { email, password } = req.body
 
-            const user = await UserService.getUserEmail(email)
-            const isPasswordOk = await verifiyPassword(password, user.password)
+            const user: User = await UserService.getUserEmail(email)
+            const isPasswordOk: Boolean = await verifiyPassword(password, user.password)
             if (!isPasswordOk) {
                 throw new EmailOrPasswordWrongException()
             }
 
-            const rawUser = {
+            const rawUser: Object = {
                 uuid: user.uuid,
                 email: user.email,
                 nickname: user.nickname,
             }
 
-            const token = jwt.sign(
+            const token: string = jwt.sign(
                 { uuid: user.uuid, password: user.password },
                 'secretKey',
             )

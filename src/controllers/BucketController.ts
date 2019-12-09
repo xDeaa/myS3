@@ -1,7 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction} from 'express'
 import { ResponseData } from '../models'
-import { UserService, BucketService } from '../services'
-import { User } from '../entities'
+import { BucketService } from '../services'
 
 export default class BucketController {
     public static getBuckets = async (
@@ -11,7 +10,7 @@ export default class BucketController {
     ): Promise<void> => {
         try {
             const { uuid } = req.params
-            const buckets = await BucketService.getBuckets(uuid)
+            const buckets: BucketService = await BucketService.getBuckets(uuid)
 
             return new ResponseData(200, { buckets }).sendJson(res)
         } catch (e) {
@@ -26,7 +25,7 @@ export default class BucketController {
     ): Promise<void> => {
         try {
             const { uuid, id } = req.params
-            const bucket = await BucketService.isBucketExists(
+            const bucket: BucketService = await BucketService.isBucketExists(
                 uuid,
                 parseInt(id),
             )
@@ -45,7 +44,7 @@ export default class BucketController {
         try {
             const { name } = req.body
             const { uuid } = req.params
-            const bucket = await BucketService.saveBucket(name, uuid)
+            const bucket: BucketService = await BucketService.saveBucket(name, uuid)
 
             return new ResponseData(200, { bucket }).sendJson(res)
         } catch (e) {
@@ -61,7 +60,7 @@ export default class BucketController {
         try {
             const { id } = req.params
             const { name } = req.body
-            const bucket = await BucketService.updateBucket(parseInt(id), name)
+            const bucket: BucketService = await BucketService.updateBucket(parseInt(id), name)
             return new ResponseData(200, { bucket }).sendJson(res)
         } catch (e) {
             next(e)

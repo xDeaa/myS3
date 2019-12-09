@@ -1,4 +1,4 @@
-import { getManager } from 'typeorm'
+import { getManager, DeleteResult } from 'typeorm'
 import { User, Bucket } from '../entities'
 import {
     AlreadyBucketExistsException,
@@ -52,7 +52,7 @@ export default class BucketService {
         user.uuid = uuid
         bucket.user = user
 
-        const exist = await getManager()
+        const exist: number = await getManager()
             .getRepository(Bucket)
             .count({ where: { name, user } })
 
@@ -73,7 +73,7 @@ export default class BucketService {
         id: number,
         name: string,
     ): Promise<Bucket> {
-        const bucketFound = await getManager()
+        const bucketFound: Bucket | undefined = await getManager()
             .getRepository(Bucket)
             .findOne(id)
 
@@ -93,7 +93,7 @@ export default class BucketService {
      * @param id id of the user to retrieve
      */
     public static async deleteBucket(id: number): Promise<void> {
-        const deletedBucket = await getManager()
+        const deletedBucket: DeleteResult = await getManager()
             .getRepository(Bucket)
             .delete(id)
 

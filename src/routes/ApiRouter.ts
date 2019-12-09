@@ -2,7 +2,6 @@ import { handleAuth, handleNotAuth } from './../middlewares/common'
 import { BaseRoute } from '../models/Route/BaseRoute'
 import UserRoutes from './User'
 import AuthRoutes from './Auth'
-import BucketRoutes from './Bucket'
 
 class ApiRoutes extends BaseRoute {
     public initializeRoutes(): void {

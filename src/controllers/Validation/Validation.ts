@@ -23,10 +23,22 @@ export default class Validation {
         }
 
         req.body = { ...req.body, ...matchedData(req, { locations: ['body'] }) }
-        req.query = { ...req.query, ...matchedData(req, { locations: ['query'] }) }
-        req.params = { ...req.params, ...matchedData(req, { locations: ['params'] }) }
-        req.headers = { ...req.headers, ...matchedData(req, { locations: ['headers'] }) }
-        req.cookies = { ...req.cookies, ...matchedData(req, { locations: ['cookies'] }) }
+        req.query = {
+            ...req.query,
+            ...matchedData(req, { locations: ['query'] }),
+        }
+        req.params = {
+            ...req.params,
+            ...matchedData(req, { locations: ['params'] }),
+        }
+        req.headers = {
+            ...req.headers,
+            ...matchedData(req, { locations: ['headers'] }),
+        }
+        req.cookies = {
+            ...req.cookies,
+            ...matchedData(req, { locations: ['cookies'] }),
+        }
 
         return { err: null }
     }

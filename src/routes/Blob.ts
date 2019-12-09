@@ -19,20 +19,14 @@ class BlobRoutes extends BaseRoute {
 
         // TODO: BlobController
         // Duplicate a blob (filename.copy.ext)
-        this.router.post(
-            '/:blobId/duplicate',
-            BucketController.createBucket,
-        )
+        this.router.post('/:blobId/duplicate', BucketController.createBucket)
 
         // TODO: BlobController
         // Add a new blob
-        this.router.post(
-            '/',
-            BucketController.createBucket,
-        )
+        this.router.post('/', BucketController.createBucket)
 
-        // TODO: BlobController  
-        // Delete a blob     
+        // TODO: BlobController
+        // Delete a blob
         this.router.delete(
             '/:blobId',
             BlobValidation.BlobParameter,

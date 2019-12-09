@@ -120,7 +120,6 @@ export const checkUserExists = async (
     }
 }
 
-
 export const checkBucketExists = async (
     req: Request,
     _: Response,

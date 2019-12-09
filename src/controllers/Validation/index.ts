@@ -4,7 +4,13 @@ import AuthValidation from './AuthValidation'
 import BlobValidation from './BlobValidation'
 import Validation from './Validation'
 
-export { UserValidation, BucketValidation, AuthValidation, BlobValidation, Validation }
+export {
+    UserValidation,
+    BucketValidation,
+    AuthValidation,
+    BlobValidation,
+    Validation,
+}
 
 export default {
     UserValidation,

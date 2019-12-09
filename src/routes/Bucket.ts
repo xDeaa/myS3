@@ -7,11 +7,11 @@ import BlobRoutes from './Blob'
 class BucketRoutes extends BaseRoute {
     public initializeRoutes(): void {
         this.router.get(
-            '/:id/blobs', 
-            BucketValidation.BucketParameter, 
-            handleError, 
+            '/:id/blobs',
+            BucketValidation.BucketParameter,
+            handleError,
             checkBucketExists,
-            BlobRoutes
+            BlobRoutes,
         )
 
         this.router.head(

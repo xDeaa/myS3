@@ -138,7 +138,7 @@ export default class UserService {
             .count({
                 where: [{ nickname }, { email }],
             })
-            
+
         return countUser > 0
     }
 }

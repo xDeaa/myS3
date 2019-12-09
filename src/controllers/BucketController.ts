@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction} from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { ResponseData } from '../models'
 import { BucketService } from '../services'
 
@@ -44,7 +44,10 @@ export default class BucketController {
         try {
             const { name } = req.body
             const { uuid } = req.params
-            const bucket: BucketService = await BucketService.saveBucket(name, uuid)
+            const bucket: BucketService = await BucketService.saveBucket(
+                name,
+                uuid,
+            )
 
             return new ResponseData(200, { bucket }).sendJson(res)
         } catch (e) {
@@ -60,7 +63,10 @@ export default class BucketController {
         try {
             const { id } = req.params
             const { name } = req.body
-            const bucket: BucketService = await BucketService.updateBucket(parseInt(id), name)
+            const bucket: BucketService = await BucketService.updateBucket(
+                parseInt(id),
+                name,
+            )
             return new ResponseData(200, { bucket }).sendJson(res)
         } catch (e) {
             next(e)

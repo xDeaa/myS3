@@ -47,7 +47,10 @@ export default class AuthController {
             const { email, password } = req.body
 
             const user: User = await UserService.getUserEmail(email)
-            const isPasswordOk: Boolean = await verifiyPassword(password, user.password)
+            const isPasswordOk: Boolean = await verifiyPassword(
+                password,
+                user.password,
+            )
             if (!isPasswordOk) {
                 throw new EmailOrPasswordWrongException()
             }

@@ -7,6 +7,7 @@ import { EmailOrPasswordWrongException } from '../models/Exception'
 import { User } from '../entities'
 
 export default class AuthController {
+
     public static createUser = async (
         req: Request,
         res: Response,
@@ -20,11 +21,8 @@ export default class AuthController {
                 email,
                 cryptedPass,
             )
-            const rawUser: Record<string, any> = {
-                uuid: user.uuid,
-                email: user.email,
-                nickname: user.nickname,
-            }
+           
+            const rawUser: Record<string, any> = AuthController.getRawUser(user)
 
             const token: string = jwt.sign(
                 { uuid: user.uuid, password: user.password },
@@ -55,11 +53,7 @@ export default class AuthController {
                 throw new EmailOrPasswordWrongException()
             }
 
-            const rawUser: Record<string, any> = {
-                uuid: user.uuid,
-                email: user.email,
-                nickname: user.nickname,
-            }
+            const rawUser: Record<string, any> = AuthController.getRawUser(user)
 
             const token: string = jwt.sign(
                 { uuid: user.uuid, password: user.password },
@@ -70,5 +64,15 @@ export default class AuthController {
         } catch (e) {
             next(e)
         }
+    }
+
+    private static getRawUser(user: User) {
+        const rawUser: Record<string, any> = {
+            uuid: user.uuid,
+            email: user.email,
+            nickname: user.nickname,
+        }
+
+        return rawUser
     }
 }

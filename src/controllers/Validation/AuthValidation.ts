@@ -1,6 +1,27 @@
-import { checkSchema, ValidationChain } from 'express-validator'
+import { checkSchema, ValidationChain, ParamSchema } from 'express-validator'
 
 export default class AuthValidation {
+
+    private static emailPasswordShema: Record<string, ParamSchema> = {
+        email: {
+            in: ['body'],
+            errorMessage: 'email is not a valid Email',
+            isEmail: true,
+        },
+        password: {
+            in: ['body'],
+            errorMessage: 'password must have at least 6 characters',
+            isString: true,
+            isLength: {
+                options: { min: 6 },
+            },
+        },
+    }
+
+    public static Login: ValidationChain[] = checkSchema(
+        AuthValidation.emailPasswordShema
+    )
+
     public static Create: ValidationChain[] = checkSchema({
         nickname: {
             in: ['body'],
@@ -10,34 +31,6 @@ export default class AuthValidation {
                 options: { min: 1 },
             },
         },
-        email: {
-            in: ['body'],
-            errorMessage: 'email is not a valid Email',
-            isEmail: true,
-        },
-        password: {
-            in: ['body'],
-            errorMessage: 'password must have at least 6 characters',
-            isString: true,
-            isLength: {
-                options: { min: 6 },
-            },
-        },
-    })
-
-    public static Login: ValidationChain[] = checkSchema({
-        email: {
-            in: ['body'],
-            errorMessage: 'email is not a valid Email',
-            isEmail: true,
-        },
-        password: {
-            in: ['body'],
-            errorMessage: 'password must have at least 6 characters',
-            isString: true,
-            isLength: {
-                options: { min: 6 },
-            },
-        },
+        ...AuthValidation.emailPasswordShema
     })
 }

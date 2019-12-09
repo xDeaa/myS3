@@ -12,9 +12,13 @@ export class Bucket {
     })
     name: string
 
-    @ManyToOne(user => user.buckets, {
-        cascade: true,
-    })
+    @ManyToOne(
+        () => User,
+        user => user.buckets,
+        {
+            cascade: true,
+        },
+    )
     user: User
 
     toJSON = (): Record<string, string | number> => {

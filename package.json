@@ -16,7 +16,7 @@
     "build": "yarn clean && yarn lint && yarn babel src/ --out-dir dist/ --extensions \".ts\" --source-maps inline --quiet --copy-files",
     "clean": "yarn rimraf dist",
     "docker": "docker-compose up -d --build",
-    "logs": "docker-compose logs"
+    "logs": "docker-compose logs -f"
   },
   "husky": {
     "hooks": {

@@ -1,7 +1,9 @@
 import { Router } from 'express'
 
 export class BaseRoute {
-    public router = Router()
+    public router = Router({
+        mergeParams: true,
+    })
 
     constructor() {
         if (new.target === BaseRoute) {

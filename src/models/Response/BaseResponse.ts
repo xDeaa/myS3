@@ -2,7 +2,7 @@ import { Response } from 'express'
 
 interface IBaseResponse {
     log(): void
-    toJSON(): object
+    toJSON(): object | null
 }
 
 export class BaseResponse implements IBaseResponse {
@@ -24,7 +24,7 @@ export class BaseResponse implements IBaseResponse {
         throw new Error('Method not implemented.')
     }
 
-    public toJSON(): object {
+    public toJSON(): object | null {
         throw new Error('Method not implemented.')
     }
 }

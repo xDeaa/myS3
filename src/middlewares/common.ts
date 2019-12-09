@@ -2,7 +2,7 @@ import { Logger } from './../controllers/Logger'
 import parser from 'body-parser'
 import compression from 'compression'
 import { Router, NextFunction, Request, Response } from 'express'
-import { Validation } from '../controllers/Validation/Validation'
+import { Validation } from '../controllers/Validation'
 import jwt from 'jsonwebtoken'
 import { User } from '../entities'
 import { UserService } from '../services'
@@ -39,9 +39,7 @@ const checkJwtPayload = async (
     const user: User | null = await UserService.getUser(payload.uuid)
 
     if (!user) return false
-    if (user.email !== payload.email) return false
     if (user.password !== payload.password) return false
-    if (user.nickname !== payload.nickname) return false
 
     return true
 }
@@ -102,4 +100,18 @@ export const handleNotAuth = (
     } else {
         next()
     }
+}
+
+export const checkUserExists = async (
+    req: Request,
+    _: Response,
+    next: NextFunction,
+): Promise<void> => {
+    try {
+        // Call getUser, will throw an exception if not exists
+        await UserService.getUser(req.params.uuid)
+        next()
+     } catch (e) {
+         return next(e)
+     }
 }

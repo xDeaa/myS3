@@ -6,7 +6,7 @@ import {
 } from 'express-validator'
 import { ResponseError } from './../../models'
 
-export class Validation {
+export default class Validation {
     public static Data = (req: Request) => {
         const errors = validationResult(req).formatWith(
             Validation.errorFormatter,
@@ -22,11 +22,11 @@ export class Validation {
             return { err }
         }
 
-        req.body = matchedData(req, { locations: ['body'] })
-        req.query = matchedData(req, { locations: ['query'] })
-        req.params = matchedData(req, { locations: ['params'] })
-        req.headers = matchedData(req, { locations: ['headers'] })
-        req.cookies = matchedData(req, { locations: ['cookies'] })
+        req.body    = { ...req.body, ...matchedData(req, { locations: ['body'] }) }
+        req.query   = { ...req.query, ...matchedData(req, { locations: ['query'] }) }
+        req.params  = { ...req.params, ...matchedData(req, { locations: ['params'] }) }
+        req.headers = { ...req.headers, ...matchedData(req, { locations: ['headers'] }) }
+        req.cookies = { ...req.cookies, ...matchedData(req, { locations: ['cookies'] }) }
 
         return { err: null }
     }

@@ -1,42 +1,82 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { ResponseData } from '../models'
 import { UserService, BucketService } from '../services'
+import { User } from '../entities'
 
 export default class BucketController {
-    public static getObjects = async (
+    public static getBuckets = async (
         req: Request,
         res: Response,
+        next: NextFunction,
     ): Promise<void> => {
-        const users = await UserService.getAllUsers()
+        try {
+            const { uuid } = req.params
+            const buckets = await BucketService.getBuckets(uuid)
 
-        return new ResponseData(200, { users }).sendJson(res)
+            return new ResponseData(200, { buckets }).sendJson(res)
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    public static checkBucket = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ): Promise<void> => {
+        try {
+            const { uuid, id } = req.params
+            const bucket = await BucketService.isBucketExists(uuid, parseInt(id))
+
+            return new ResponseData(!bucket ? 400 : 200).sendJson(res)
+        } catch (e) {
+            next(e)
+        }
     }
 
     public static createBucket = async (
         req: Request,
         res: Response,
+        next: NextFunction,
     ): Promise<void> => {
-        const { name, user } = req.body
-        const bucket = await BucketService.saveBucket(name, user)
+        try {
+            const { name } = req.body
+            const { uuid } = req.params
+            const bucket = await BucketService.saveBucket(name, uuid)
 
-        return new ResponseData(200, { bucket }).sendJson(res)
+            return new ResponseData(200, { bucket }).sendJson(res)
+        } catch (e) {
+            next(e)
+        }
     }
 
     public static updateBucket = async (
         req: Request,
         res: Response,
+        next: NextFunction,
     ): Promise<void> => {
-        return new ResponseData(200, {
-            users: req.query.uuid,
-        }).sendJson(res)
+        try {
+            const { id } = req.params;
+            const { name } = req.body;
+            const bucket = await BucketService.updateBucket(parseInt(id), name)
+            return new ResponseData(200, { bucket }).sendJson(res)
+        } catch (e) {
+            next(e)
+        }
     }
 
     public static deleteBucket = async (
         req: Request,
         res: Response,
+        next: NextFunction,
     ): Promise<void> => {
-        return new ResponseData(200, {
-            users: req.query.uuid,
-        }).sendJson(res)
+        try {
+            const { id } = req.params;
+            await BucketService.deleteBucket(parseInt(id))
+
+            return new ResponseData(200, { msg: "Successfully deleted" }).sendJson(res)
+        } catch (e) {
+            next(e)
+        }
     }
 }

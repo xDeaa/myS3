@@ -1,12 +1,30 @@
-import { checkSchema, ValidationChain } from 'express-validator'
+import { checkSchema, ValidationChain, ParamSchema } from 'express-validator'
 
-export class BucketValidation {
-    public static FieldsNecessary: ValidationChain[] = checkSchema({
-        uuid: {
+export default class BucketValidation {
+
+    private static baseSchema: Record<string, ParamSchema> = {
+        id: {
             in: ['params'],
-            errorMessage: 'uuid is not a valid UUID',
-            isUUID: true,
+            errorMessage: 'id is not a valid number',
+            isInt: true,
         },
+    }
+
+    public static BucketParameter: ValidationChain[] = checkSchema(BucketValidation.baseSchema)
+
+    public static FieldsNecessary: ValidationChain[] = checkSchema({
+        name: {
+            in: ['body'],
+            errorMessage: 'name is not a valid String',
+            isString: true,
+            isLength: {
+                options: { min: 1 },
+            },
+        },
+    })
+
+    public static UpdateParameter: ValidationChain[] = checkSchema({
+        ...BucketValidation.baseSchema,
         name: {
             in: ['body'],
             errorMessage: 'name is not a valid String',

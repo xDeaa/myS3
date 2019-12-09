@@ -1,17 +1,21 @@
 import { BaseRoute } from '../models'
-import { UserValidation } from '../controllers/Validation/UserValidation'
-import UserController from '../controllers/UserController'
-import { handleError } from '../middlewares/common'
+import { UserValidation } from '../controllers/Validation'
+import AuthController from '../controllers/AuthController'
+import { handleError, checkUserExists } from '../middlewares/common'
 
 class AuthRoutes extends BaseRoute {
     public initializeRoutes(): void {
-        /// TODO: Controller
-        this.router.post('/login')
+        this.router.post(
+            '/login',
+            UserValidation.Create,
+            handleError,
+            AuthController.loginUser,
+        )
         this.router.post(
             '/register',
             UserValidation.Create,
             handleError,
-            UserController.createUser,
+            AuthController.createUser,
         )
     }
 }

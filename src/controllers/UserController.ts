@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import e, { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { ResponseData } from '../models'
 import { UserService, MailService } from '../services'
 import { hashPassword } from '../utils/Utils'
@@ -23,37 +23,6 @@ export default class UserController {
             const user = await UserService.getUser(req.params.uuid)
 
             return new ResponseData(200, { user }).sendJson(res)
-        } catch (e) {
-            next(e)
-        }
-    }
-
-    public static createUser = async (
-        req: Request,
-        res: Response,
-        next: NextFunction,
-    ): Promise<void> => {
-        const { nickname, email, password } = req.body
-        const cryptedPass = await hashPassword(password)
-        try {
-            const user = await UserService.saveUser(
-                nickname,
-                email,
-                cryptedPass,
-            )
-            const rawUser = {
-                uuid: user.uuid,
-                email: user.email,
-                nickname: user.nickname,
-            }
-
-            const token = jwt.sign(
-                { ...rawUser, password: user.password },
-                'secretKey',
-            )
-            await MailService.sendEmail()
-
-            return new ResponseData(200, { ...rawUser, token }).sendJson(res)
         } catch (e) {
             next(e)
         }
@@ -85,7 +54,7 @@ export default class UserController {
     ): Promise<void> => {
         try {
             await UserService.deleteUser(req.params.uuid)
-            return new ResponseData(200, {}).sendJson(res)
+            return new ResponseData(200, {msg: "Successfully deleted"}).sendJson(res)
         } catch (e) {
             next(e)
         }

@@ -2,9 +2,9 @@ import { Logger } from '../../controllers/Logger'
 import { BaseResponse } from './BaseResponse'
 
 export class ResponseData<T extends object> extends BaseResponse {
-    public readonly data: T
+    public readonly data?: T
 
-    constructor(statusCode: number, data: T) {
+    constructor(statusCode: number, data?: T) {
         super(statusCode)
         this.data = data
     }
@@ -14,6 +14,7 @@ export class ResponseData<T extends object> extends BaseResponse {
     }
 
     public toJSON() {
+        if (!this.data) return null;
         return {
             data: this.data,
         }

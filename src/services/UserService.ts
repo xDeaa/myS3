@@ -5,6 +5,7 @@ import { User } from '../entities'
 import {
     AlreadyUserExistsException,
     UserNotExistsException,
+    EmailOrPasswordWrongException,
 } from '../models/Exception'
 
 export default class UserService {
@@ -34,21 +35,33 @@ export default class UserService {
     }
 
     /**
+     * Find a specific user with email
+     * @param email Email of the user to retrieve
+     */
+    public static async getUserEmail(email: string): Promise<User> {
+        const userFound = await getManager()
+            .getRepository(User)
+            .findOne({ email })
+
+        if (!userFound) {
+            throw new EmailOrPasswordWrongException()
+        }
+
+        return userFound
+    }
+
+    /**
      * Delete a specific user
      * @param uuid UUID of the user to delete
      */
     public static async deleteUser(uuid: string): Promise<void> {
-        const userFound = await getManager()
-            .getRepository(User)
-            .findOne(uuid)
-
-        if (!userFound) {
-            throw new UserNotExistsException()
-        }
-
-        await getManager()
+        const userDeleted = await getManager()
             .getRepository(User)
             .delete(uuid)
+
+        if (!userDeleted || userDeleted.affected === 0) {
+            throw new UserNotExistsException()
+        }
     }
 
     /**

@@ -7,7 +7,6 @@ import BucketRoutes from './Bucket'
 class ApiRoutes extends BaseRoute {
     public initializeRoutes(): void {
         this.router.use('/users', handleAuth, UserRoutes)
-        this.router.use('/buckets', handleAuth, BucketRoutes)
         this.router.use('/auth', handleNotAuth, AuthRoutes)
     }
 }

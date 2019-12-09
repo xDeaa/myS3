@@ -5,28 +5,30 @@ import { handleError } from '../middlewares/common'
 
 class BucketRoutes extends BaseRoute {
     public initializeRoutes(): void {
-        this.router.get(
-            '/:uuid',
-            UserValidation.UserParameter,
+        this.router.head(
+            '/:id',
+            BucketValidation.BucketParameter,
             handleError,
-            BucketController.getObjects,
+            BucketController.checkBucket,
         )
 
+        this.router.get('/', BucketController.getBuckets)
+
         this.router.post(
-            '/:uuid',
+            '/',
             BucketValidation.FieldsNecessary,
             handleError,
             BucketController.createBucket,
         )
         this.router.put(
-            '/:uuid',
-            BucketValidation.FieldsNecessary,
+            '/:id',
+            BucketValidation.UpdateParameter,
             handleError,
             BucketController.updateBucket,
         )
         this.router.delete(
-            '/:uuid',
-            BucketValidation.FieldsNecessary,
+            '/:id',
+            BucketValidation.BucketParameter,
             handleError,
             BucketController.deleteBucket,
         )

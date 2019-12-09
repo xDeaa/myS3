@@ -31,7 +31,7 @@ export class User {
     password: string
 
     @OneToMany(
-        type => Bucket,
+        () => Bucket,
         bucket => bucket.user,
     )
     buckets: Bucket[]

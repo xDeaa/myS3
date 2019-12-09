@@ -22,6 +22,7 @@ export default class AuthValidation {
     )
 
     public static Create: ValidationChain[] = checkSchema({
+        ...AuthValidation.emailPasswordShema,
         nickname: {
             in: ['body'],
             errorMessage: 'nickname is not a valid String',
@@ -30,6 +31,5 @@ export default class AuthValidation {
                 options: { min: 1 },
             },
         },
-        ...AuthValidation.emailPasswordShema,
     })
 }

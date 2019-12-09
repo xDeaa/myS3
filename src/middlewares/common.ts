@@ -60,7 +60,7 @@ export const handleAuth = async (
     }
 
     try {
-        const decoded: string | Record<string, any> = jwt.verify(
+        const decoded: string | object = jwt.verify(
             req.headers.authorization,
             'secretKey',
         )

@@ -21,7 +21,9 @@ export default class AuthController {
                 cryptedPass,
             )
 
-            const rawUser: Record<string, any> = AuthController.getRawUser(user)
+            const rawUser: Record<string, string> = AuthController.getRawUser(
+                user,
+            )
 
             const token: string = jwt.sign(
                 { uuid: user.uuid, password: user.password },
@@ -68,8 +70,8 @@ export default class AuthController {
         }
     }
 
-    private static getRawUser(user: User): Record<string, any> {
-        const rawUser: Record<string, any> = {
+    private static getRawUser(user: User): Record<string, string> {
+        const rawUser: Record<string, string> = {
             uuid: user.uuid,
             email: user.email,
             nickname: user.nickname,

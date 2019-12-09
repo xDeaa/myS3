@@ -1,7 +1,6 @@
 import { checkSchema, ValidationChain, ParamSchema } from 'express-validator'
 
 export default class AuthValidation {
-
     private static emailPasswordShema: Record<string, ParamSchema> = {
         email: {
             in: ['body'],
@@ -19,7 +18,7 @@ export default class AuthValidation {
     }
 
     public static Login: ValidationChain[] = checkSchema(
-        AuthValidation.emailPasswordShema
+        AuthValidation.emailPasswordShema,
     )
 
     public static Create: ValidationChain[] = checkSchema({
@@ -31,6 +30,6 @@ export default class AuthValidation {
                 options: { min: 1 },
             },
         },
-        ...AuthValidation.emailPasswordShema
+        ...AuthValidation.emailPasswordShema,
     })
 }

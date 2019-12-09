@@ -12,7 +12,7 @@ export default class UserValidation {
     public static UserParameter: ValidationChain[] = checkSchema(
         UserValidation.baseSchema,
     )
-    
+
     public static Update: ValidationChain[] = checkSchema({
         ...UserValidation.baseSchema,
         nickname: {

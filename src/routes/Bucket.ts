@@ -1,10 +1,19 @@
 import BucketController from '../controllers/BucketController'
 import { BaseRoute } from '../models'
 import { BucketValidation } from '../controllers/Validation'
-import { handleError } from '../middlewares/common'
+import { handleError, checkBucketExists } from '../middlewares/common'
+import BlobRoutes from './Blob'
 
 class BucketRoutes extends BaseRoute {
     public initializeRoutes(): void {
+        this.router.get(
+            '/:id/blobs', 
+            BucketValidation.BucketParameter, 
+            handleError, 
+            checkBucketExists,
+            BlobRoutes
+        )
+
         this.router.head(
             '/:id',
             BucketValidation.BucketParameter,

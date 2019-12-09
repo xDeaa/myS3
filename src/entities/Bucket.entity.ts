@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
+import {
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    OneToMany,
+} from 'typeorm'
 import { User } from './User.entity'
+import { Blob } from './Blob.entity'
 
 @Entity('bucket')
 export class Bucket {
@@ -21,7 +28,13 @@ export class Bucket {
     )
     user: User
 
-    toJSON = (): Record<string, string | number> => {
+    @OneToMany(
+        () => Blob,
+        blob => blob.bucket,
+    )
+    blobs: Blob[]
+
+    toJSON = (): Record<string, any> => {
         return {
             id: this.id,
             name: this.name,

@@ -5,8 +5,9 @@ import { Router, NextFunction, Request, Response } from 'express'
 import { Validation } from '../controllers/Validation'
 import jwt from 'jsonwebtoken'
 import { User } from '../entities'
-import { UserService } from '../services'
+import { UserService, BucketService } from '../services'
 import { ResponseError } from '../models'
+import { BucketNotExistsException } from '../models/Exception'
 
 export const handleBodyRequestParsing = (router: Router): void => {
     router.use(parser.urlencoded({ extended: true }))
@@ -117,4 +118,18 @@ export const checkUserExists = async (
     } catch (e) {
         return next(e)
     }
+}
+
+
+export const checkBucketExists = async (
+    req: Request,
+    _: Response,
+    next: NextFunction,
+): Promise<void> => {
+    const { uuid, id } = req.params
+    const bucket = await BucketService.isBucketExists(uuid, parseInt(id))
+    if (bucket) {
+        return next(new BucketNotExistsException())
+    }
+    next()
 }

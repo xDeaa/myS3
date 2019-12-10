@@ -1,5 +1,5 @@
 import { handleAuth, handleNotAuth } from './../middlewares/common'
-import { BaseRoute } from '../models/Route/BaseRoute'
+import BaseRoute from '../models/Route/BaseRoute'
 import UserRoutes from './User'
 import AuthRoutes from './Auth'
 

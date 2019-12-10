@@ -6,6 +6,16 @@ import { Logger } from './controllers/Logger'
 import entities from './entities'
 import { RouteBuilder } from './routes/RouterBuilder'
 import 'reflect-metadata'
+// eslint-disable-next-line
+import { AppAttributes } from './models'
+
+declare global {
+    namespace Express {
+        export interface Request {
+            attributes: AppAttributes
+        }
+    }
+}
 
 // Init variables ENVs
 dotenv.config()
@@ -40,6 +50,7 @@ const typeOrmConfig: MysqlConnectionOptions = {
     database: MYSQL_BASE,
     entities: Object.values(entities),
     synchronize: true,
+    charset: 'utf8mb4_unicode_ci',
 }
 createConnection(typeOrmConfig)
     .then(() => {

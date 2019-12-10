@@ -36,7 +36,7 @@ export class User {
     )
     buckets: Bucket[]
 
-    toJSON = (): Record<string, string | number> => {
+    toJSON = (): object => {
         return {
             uuid: this.uuid,
             nickname: this.nickname,

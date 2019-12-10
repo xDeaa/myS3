@@ -5,17 +5,28 @@ import { Router, NextFunction, Request, Response } from 'express'
 import { Validation } from '../controllers/Validation'
 import jwt from 'jsonwebtoken'
 import { User } from '../entities'
-import { UserService, BucketService } from '../services'
-import { ResponseError } from '../models'
-import { BucketNotExistsException } from '../models/Exception'
+import { UserService, BucketService, BlobService } from '../services'
+import { AppAttributes } from '../models'
+import {
+    UnAuthorizedException,
+    AlreadyConnectedException,
+} from '../models/Exception'
 
-export const handleBodyRequestParsing = (router: Router): void => {
+export const handleBaseMiddleware = (router: Router): void => {
+    // Handle body request parsing
     router.use(parser.urlencoded({ extended: true }))
     router.use(parser.json())
-}
-
-export const handleCompression = (router: Router): void => {
+    // Handle compression
     router.use(compression())
+    // Handle app attributes initialization
+    router.use((req: Request, res: Response, next: NextFunction) => {
+        try {
+            req.attributes = {} as AppAttributes
+            next()
+        } catch (e) {
+            next(e)
+        }
+    })
 }
 
 export const handleError = async (
@@ -51,13 +62,7 @@ export const handleAuth = async (
     next: NextFunction,
 ): Promise<void> => {
     if (!req.headers.authorization) {
-        return next(
-            new ResponseError(
-                401,
-                'unauthorized',
-                'You must provide Authorization header !',
-            ),
-        )
+        return next(new UnAuthorizedException())
     }
 
     try {
@@ -68,13 +73,7 @@ export const handleAuth = async (
 
         const isValidPayload: boolean = await checkJwtPayload(decoded)
         if (!isValidPayload) {
-            return next(
-                new ResponseError(
-                    401,
-                    'unauthorized',
-                    'Authorization token payload is invalid !',
-                ),
-            )
+            return next(new UnAuthorizedException())
         }
     } catch (e) {
         Logger.errorLog(e)
@@ -94,13 +93,7 @@ export const handleNotAuth = (
     next: NextFunction,
 ): void => {
     if (req.headers.authorization) {
-        next(
-            new ResponseError(
-                400,
-                'user_connected',
-                'Header Authorization must be empty',
-            ),
-        )
+        next(new AlreadyConnectedException())
     } else {
         next()
     }
@@ -113,7 +106,8 @@ export const checkUserExists = async (
 ): Promise<void> => {
     try {
         // Call getUser, will throw an exception if not exists
-        await UserService.getUser(req.params.uuid)
+        const user: User = await UserService.getUser(req.params.uuid)
+        req.attributes.user = user
         next()
     } catch (e) {
         return next(e)
@@ -125,10 +119,31 @@ export const checkBucketExists = async (
     _: Response,
     next: NextFunction,
 ): Promise<void> => {
-    const { uuid, id } = req.params
-    const bucket = await BucketService.isBucketExists(uuid, parseInt(id))
-    if (bucket) {
-        return next(new BucketNotExistsException())
+    try {
+        const bucket = await BucketService.getBucket(
+            req.attributes.user,
+            parseInt(req.params.id),
+        )
+        req.attributes.bucket = bucket
+        next()
+    } catch (e) {
+        next(e)
     }
-    next()
+}
+
+export const checkBlobExists = async (
+    req: Request,
+    _: Response,
+    next: NextFunction,
+): Promise<void> => {
+    try {
+        const blob = await BlobService.getBlob(
+            req.attributes.bucket,
+            parseInt(req.params.blobId),
+        )
+        req.attributes.blob = blob
+        next()
+    } catch (e) {
+        next(e)
+    }
 }

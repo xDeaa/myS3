@@ -1,9 +1,6 @@
 import { Application, NextFunction, Request, Response } from 'express'
 import logfmt from 'logfmt'
-import {
-    handleBodyRequestParsing,
-    handleCompression,
-} from '../middlewares/common'
+import { handleBaseMiddleware } from '../middlewares/common'
 import { ResponseError } from '../models'
 import { InternalErrorException } from '../models/Exception'
 import ApiRouter from './ApiRouter'
@@ -11,17 +8,14 @@ import ApiRouter from './ApiRouter'
 export class RouteBuilder {
     public static build(app: Application): void {
         // Apply middlewares
-        handleBodyRequestParsing(app)
-        handleCompression(app)
+        handleBaseMiddleware(app)
 
         if (process.env.NODE_ENV !== 'production') {
             app.use(logfmt.requestLogger())
         }
 
         app.use('/api', ApiRouter)
-
-        app.use(RouteBuilder.catchErrors)
-        app.use(RouteBuilder.route404)
+        app.use(RouteBuilder.catchErrors, RouteBuilder.route404)
     }
 
     private static catchErrors(

@@ -1,7 +1,7 @@
 import { Logger } from '../../controllers/Logger'
-import { BaseResponse } from './BaseResponse'
+import BaseResponse from './BaseResponse'
 
-export class ResponseData<T extends object> extends BaseResponse {
+export default class ResponseData<T extends object> extends BaseResponse {
     public readonly data?: T
 
     constructor(statusCode: number, data?: T) {

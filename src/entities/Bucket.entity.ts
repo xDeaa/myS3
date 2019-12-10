@@ -24,6 +24,7 @@ export class Bucket {
         user => user.buckets,
         {
             cascade: true,
+            nullable: false,
         },
     )
     user: User
@@ -34,7 +35,7 @@ export class Bucket {
     )
     blobs: Blob[]
 
-    toJSON = (): Record<string, any> => {
+    toJSON = (): object => {
         return {
             id: this.id,
             name: this.name,

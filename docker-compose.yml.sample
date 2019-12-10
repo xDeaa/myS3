@@ -3,7 +3,7 @@
 version: "3"
 services:
   my_mysql:
-    image: mysql:8
+    image: mysql:5
     environment:
       MYSQL_DATABASE: myS3
       MYSQL_USER: myS3User
@@ -16,6 +16,7 @@ services:
       - 80:80
     links:
       - my_mysql:mysql
+    restart: always
     environment:
       PORT: 80
       MYSQL_HOST: mysql
@@ -25,3 +26,4 @@ services:
       MYSQL_PORT: 3306
       APP_ENV: "dev"
       APP_LOG_LEVEL: "info"
+      STORAGE_PATH: "/myS3DATA/"

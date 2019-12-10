@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 import { Bucket } from './Bucket.entity'
+import { join } from 'path'
 
 @Entity('blob')
 export class Blob {
@@ -29,16 +30,29 @@ export class Blob {
         bucket => bucket.blobs,
         {
             cascade: true,
+            nullable: false,
         },
     )
     bucket: Bucket
 
-    toJSON = (): Record<string, any> => {
+    getFullPath = (): string => join(this.path, this.name)
+
+    toJSON = (): object => {
         return {
             id: this.id,
             name: this.name,
             path: this.path,
             size: this.size,
         }
+    }
+
+    duplicate = (): Blob => {
+        const blob = new Blob()
+        blob.name = this.name
+        blob.path = this.path
+        blob.size = this.size
+        blob.bucket = this.bucket
+
+        return blob
     }
 }

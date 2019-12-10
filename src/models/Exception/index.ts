@@ -4,6 +4,11 @@ import UserNotExistsException from './UserNotExistsException'
 import BucketNotExistsException from './BucketNotExistsException'
 import AlreadyBucketExistsException from './AlreadyBucketExistsException'
 import EmailOrPasswordWrongException from './EmailOrPasswordWrongException'
+import UnAuthorizedException from './UnAuthorizedException'
+import AlreadyConnectedException from './AlreadyConnectedException'
+import BlobNotExistsException from './BlobNotExistsException'
+import AlreadyBlobExistsException from './AlreadyBlobExistsException'
+import NoFileException from './NoFileException'
 
 export {
     InternalErrorException,
@@ -12,4 +17,9 @@ export {
     BucketNotExistsException,
     AlreadyBucketExistsException,
     EmailOrPasswordWrongException,
+    UnAuthorizedException,
+    AlreadyConnectedException,
+    BlobNotExistsException,
+    AlreadyBlobExistsException,
+    NoFileException,
 }

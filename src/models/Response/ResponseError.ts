@@ -1,7 +1,7 @@
 import { Logger } from '../../controllers/Logger'
-import { BaseResponse } from './BaseResponse'
+import BaseResponse from './BaseResponse'
 
-export class ResponseError extends BaseResponse {
+export default class ResponseError extends BaseResponse {
     public readonly code: string
     public readonly message: string
     public readonly detail?: string

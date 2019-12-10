@@ -2,9 +2,13 @@ import nodemailer from 'nodemailer'
 
 export default class MailService {
     /**
-     * Find all users
+     * Send an email
      */
-    public static async sendEmail(): Promise<void> {
+    private static async sendEmail(
+        to: string,
+        subject: string,
+        body: string,
+    ): Promise<void> {
         // Generate test SMTP service account from ethereal.email
         // Only needed if you don't have a real mail account for testing
         const testAccount = await nodemailer.createTestAccount()
@@ -23,10 +27,9 @@ export default class MailService {
         // send mail with defined transport object
         const info = await transporter.sendMail({
             from: '"Fred Foo 👻" <foo@example.com>', // sender address
-            to: 'jeancharles.msse@gmail.com', // list of receivers
-            subject: 'Hello ✔', // Subject line
-            text: 'Hello world?', // plain text body
-            html: '<b>Hello world?</b>', // html body
+            to, // list of receivers
+            subject, // Subject line
+            html: body, // html body
         })
 
         console.log('Message sent: %s', info.messageId)
@@ -35,5 +38,23 @@ export default class MailService {
         // Preview only available when sending through an Ethereal account
         console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
         // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    }
+
+    /**
+     * Send user email creation
+     */
+    public static async sendUserEmailCreation(
+        nickname: string,
+        email: string,
+    ): Promise<void> {
+        return MailService.sendEmail(
+            email,
+            'Account creation',
+            `
+            Hello, ${nickname} !
+
+            Your account has been successfully created ;)
+            `,
+        )
     }
 }

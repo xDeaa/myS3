@@ -6,12 +6,13 @@ import BlobRoutes from './Blob'
 
 class BucketRoutes extends BaseRoute {
     public initializeRoutes(): void {
-        this.router.use(
-            '/:id/blobs',
-            BucketValidation.BucketParameter,
+        this.router.get('/', BucketController.getBuckets)
+
+        this.router.post(
+            '/',
+            BucketValidation.FieldsNecessary,
             handleError,
-            checkBucketExists,
-            BlobRoutes,
+            BucketController.createBucket,
         )
 
         this.router.head(
@@ -21,14 +22,6 @@ class BucketRoutes extends BaseRoute {
             BucketController.checkBucket,
         )
 
-        this.router.get('/', BucketController.getBuckets)
-
-        this.router.post(
-            '/',
-            BucketValidation.FieldsNecessary,
-            handleError,
-            BucketController.createBucket,
-        )
         this.router.put(
             '/:id',
             BucketValidation.UpdateParameter,
@@ -42,6 +35,14 @@ class BucketRoutes extends BaseRoute {
             handleError,
             checkBucketExists,
             BucketController.deleteBucket,
+        )
+
+        this.router.use(
+            '/:id/blobs',
+            BucketValidation.BucketParameter,
+            handleError,
+            checkBucketExists,
+            BlobRoutes,
         )
     }
 }

@@ -1,4 +1,4 @@
-import { Logger } from './../controllers/Logger'
+import Logger from './../controllers/Logger'
 import parser from 'body-parser'
 import compression from 'compression'
 import { Router, NextFunction, Request, Response } from 'express'
@@ -14,12 +14,13 @@ import {
 
 export const handleBaseMiddleware = (router: Router): void => {
     // Handle body request parsing
-    router.use(parser.urlencoded({ extended: true }))
-    router.use(parser.json())
+    router.use(parser.urlencoded({ extended: true }), parser.json())
+
     // Handle compression
     router.use(compression())
+
     // Handle app attributes initialization
-    router.use((req: Request, res: Response, next: NextFunction) => {
+    router.use((req: Request, _: Response, next: NextFunction) => {
         try {
             req.attributes = {} as AppAttributes
             next()
@@ -110,7 +111,7 @@ export const checkUserExists = async (
         req.attributes.user = user
         next()
     } catch (e) {
-        return next(e)
+        next(e)
     }
 }
 

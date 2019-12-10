@@ -11,6 +11,7 @@ class AuthRoutes extends BaseRoute {
             handleError,
             AuthController.loginUser,
         )
+
         this.router.post(
             '/register',
             AuthValidation.Create,

@@ -7,37 +7,36 @@ import multer from 'multer'
 import { existsSync, mkdirSync } from 'fs'
 
 const storage = multer.diskStorage({
-    async destination(req, file, cb) {
-        const { uuid } = req.attributes.user
-        const { name } = req.attributes.bucket
-
+    async destination(req, _, cb) {
+        const { user, bucket } = req.attributes
         const { STORAGE_PATH = '' } = process.env
-
-        const pathName = path.join(STORAGE_PATH, uuid, name)
+        const pathName = path.join(STORAGE_PATH, user.uuid, bucket.name)
 
         try {
             if (!existsSync(pathName)) {
-                mkdirSync(pathName, {
-                    recursive: true,
-                })
+                mkdirSync(pathName, { recursive: true })
             }
-        } catch (err) {
-            console.error(err)
+            cb(null, pathName)
+        } catch (e) {
+            cb(e, '')
         }
-
-        cb(null, pathName)
     },
-    filename(req, file, cb) {
+    filename(_, file, cb) {
         cb(null, file.originalname)
     },
 })
-
-const upload = multer({ storage })
 
 class BlobRoutes extends BaseRoute {
     public initializeRoutes(): void {
         // Get all blobs
         this.router.get('/', BlobController.getBlobs)
+
+        // Upload and create a new blob
+        this.router.post(
+            '/',
+            multer({ storage }).single('blob'),
+            BlobController.createBlob,
+        )
 
         // Get blob file data
         this.router.get(
@@ -74,9 +73,6 @@ class BlobRoutes extends BaseRoute {
             checkBlobExists,
             BlobController.duplicateBlob,
         )
-
-        // Upload and create a new blob
-        this.router.post('/', upload.single('blob'), BlobController.createBlob)
 
         // Delete a blob
         this.router.delete(

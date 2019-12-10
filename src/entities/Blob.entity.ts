@@ -1,9 +1,9 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
-import { Bucket } from './Bucket.entity'
+import { Bucket } from '.'
 import { join } from 'path'
 
 @Entity('blob')
-export class Blob {
+export default class Blob {
     @PrimaryGeneratedColumn()
     id: number
 

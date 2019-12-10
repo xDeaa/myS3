@@ -5,6 +5,7 @@ import { UserService, MailService } from '../services'
 import { verifiyPassword, hashPassword } from '../utils/Utils'
 import { EmailOrPasswordWrongException } from '../models/Exception'
 import { User } from '../entities'
+import uuid from 'uuid'
 
 export default class AuthController {
     public static createUser = async (
@@ -12,18 +13,20 @@ export default class AuthController {
         res: Response,
         next: NextFunction,
     ): Promise<void> => {
-        const { nickname, email, password } = req.body
-        const cryptedPass = await hashPassword(password)
         try {
-            const user: User = await UserService.saveUser(
-                nickname,
-                email,
-                cryptedPass,
-            )
+            const { nickname, email, password } = req.body
 
-            const rawUser: Record<string, string> = AuthController.getRawUser(
-                user,
-            )
+            const cryptedPass = await hashPassword(password)
+
+            const newUser: User = new User()
+            newUser.uuid = uuid.v4()
+            newUser.nickname = nickname
+            newUser.email = email
+            newUser.password = cryptedPass
+
+            const user: User = await UserService.saveUser(newUser)
+
+            const rawUser = AuthController.getRawUser(user)
 
             const token: string = jwt.sign(
                 { uuid: user.uuid, password: user.password },
@@ -46,18 +49,11 @@ export default class AuthController {
             const { email, password } = req.body
 
             const user: User = await UserService.getUserEmail(email)
-            const isPasswordOk: boolean = await verifiyPassword(
-                password,
-                user.password,
-            )
-            if (!isPasswordOk) {
+            if (!(await verifiyPassword(password, user.password))) {
                 throw new EmailOrPasswordWrongException()
             }
 
-            const rawUser: Record<
-                string,
-                string | number
-            > = AuthController.getRawUser(user)
+            const rawUser = AuthController.getRawUser(user)
 
             const token: string = jwt.sign(
                 { uuid: user.uuid, password: user.password },

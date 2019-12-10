@@ -6,14 +6,6 @@ import BucketRoutes from './Bucket'
 
 class UserRoutes extends BaseRoute {
     public initializeRoutes(): void {
-        this.router.use(
-            '/:uuid/buckets',
-            UserValidation.UserParameter,
-            handleError,
-            checkUserExists,
-            BucketRoutes,
-        )
-
         this.router.get('/', UserController.getUsers)
 
         this.router.get(
@@ -30,12 +22,21 @@ class UserRoutes extends BaseRoute {
             checkUserExists,
             UserController.updateUser,
         )
+
         this.router.delete(
             '/:uuid',
             UserValidation.UserParameter,
             handleError,
             checkUserExists,
             UserController.deleteUser,
+        )
+
+        this.router.use(
+            '/:uuid/buckets',
+            UserValidation.UserParameter,
+            handleError,
+            checkUserExists,
+            BucketRoutes,
         )
     }
 }

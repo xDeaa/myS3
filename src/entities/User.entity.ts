@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryColumn, OneToMany } from 'typeorm'
-import { Bucket } from './Bucket.entity'
+import { Bucket } from '.'
 
 @Entity('user')
-export class User {
+export default class User {
     @PrimaryColumn({
         nullable: false,
         unique: true,

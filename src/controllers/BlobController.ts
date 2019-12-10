@@ -111,12 +111,10 @@ export default class BlobController {
             let duplicateBlob: Blob = blob.duplicate()
             duplicateBlob.bucket = req.attributes.bucket
 
-            // TODO: Add number copy
             const ext = path.extname(blob.name)
             const name = path.basename(blob.name, ext)
             const nbFile = BlobController.countBlobFile(name, ext, blob.path)
             const nameDuplicate = `${name}.COPY.${nbFile + 1}${ext}`
-            console.log('Duplicate name', nameDuplicate)
 
             duplicateBlob.name = nameDuplicate
 
@@ -137,24 +135,18 @@ export default class BlobController {
         try {
             const files = readdirSync(path)
             const regex = new RegExp(`${name}(.COPY.([0-9]+))?${ext}`)
-            console.log(regex)
 
             let currentMaxCopy = 0
             files.forEach(file => {
                 const match = file.match(regex)
-                console.log(match)
 
                 if (match && match.length > 0) {
                     const copyCount = match[2] ? parseInt(match[2]) : 0
-                    console.log('MatchValue', copyCount)
-                    console.log('Current MAx', currentMaxCopy)
-
                     if (copyCount > currentMaxCopy) {
                         currentMaxCopy = copyCount
                     }
                 }
             })
-            console.log('Final value', currentMaxCopy)
 
             return currentMaxCopy
         } catch (_) {

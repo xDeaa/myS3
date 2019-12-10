@@ -5,7 +5,7 @@ import { ResponseError } from '../models'
 import { InternalErrorException } from '../models/Exception'
 import ApiRouter from './ApiRouter'
 
-export class RouteBuilder {
+export default class RouteBuilder {
     public static build(app: Application): void {
         // Apply middlewares
         handleBaseMiddleware(app)

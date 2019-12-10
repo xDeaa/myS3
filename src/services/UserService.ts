@@ -1,20 +1,56 @@
-import { getManager, DeleteResult } from 'typeorm'
-import uuid from 'uuid'
+import { getRepository } from 'typeorm'
 import { User } from '../entities'
 import {
     AlreadyUserExistsException,
     UserNotExistsException,
     EmailOrPasswordWrongException,
 } from '../models/Exception'
+import { BaseService } from '.'
 
 export default class UserService {
+    /**
+     * Save a new User
+     * @param nickname Nickname of the new user
+     * @param email Email of the new user
+     * @param password Password encrypted of the new user
+     */
+    public static async saveUser(user: User): Promise<User> {
+        const exist: number = await getRepository(User).count({
+            where: [{ nickname: user.nickname }, { email: user.email }],
+        })
+
+        if (exist > 0) {
+            throw new AlreadyUserExistsException()
+        }
+
+        return getRepository(User).save(user)
+    }
+
+    /**
+     * Update a specific user
+     * @param user User to update
+     */
+    public static updateUser(user: User): Promise<User> {
+        return getRepository(User).save(user)
+    }
+
+    /**
+     * Delete a specific user
+     * @param user User to delete
+     */
+    public static deleteUser(user: User): Promise<void> {
+        return BaseService.baseDelete(
+            User,
+            user.uuid,
+            new UserNotExistsException(),
+        )
+    }
+
     /**
      * Find all users
      */
     public static getAllUsers(): Promise<User[]> {
-        return getManager()
-            .getRepository(User)
-            .find()
+        return getRepository(User).find()
     }
 
     /**
@@ -22,9 +58,7 @@ export default class UserService {
      * @param uuid UUID of the user to retrieve
      */
     public static async getUser(uuid: string): Promise<User> {
-        const userFound: User | undefined = await getManager()
-            .getRepository(User)
-            .findOne(uuid)
+        const userFound = await getRepository(User).findOne(uuid)
 
         if (!userFound) {
             throw new UserNotExistsException()
@@ -38,83 +72,12 @@ export default class UserService {
      * @param email Email of the user to retrieve
      */
     public static async getUserEmail(email: string): Promise<User> {
-        const userFound: User | undefined = await getManager()
-            .getRepository(User)
-            .findOne({ email })
+        const userFound = await getRepository(User).findOne({ email })
 
         if (!userFound) {
             throw new EmailOrPasswordWrongException()
         }
 
         return userFound
-    }
-
-    /**
-     * Delete a specific user
-     * @param user User to delete
-     */
-    public static async deleteUser(user: User): Promise<void> {
-        const userDeleted: DeleteResult = await getManager()
-            .getRepository(User)
-            .delete(user.uuid)
-
-        if (!userDeleted || userDeleted.affected === 0) {
-            throw new UserNotExistsException()
-        }
-    }
-
-    /**
-     * Update a specific user
-     * @param user User to update
-     */
-    public static async updateUser(user: User): Promise<User> {
-        return getManager()
-            .getRepository(User)
-            .save(user)
-    }
-
-    /**
-     * Save a new User
-     * @param nickname Nickname of the new user
-     * @param email Email of the new user
-     * @param password Password encrypted of the new user
-     */
-    public static async saveUser(
-        nickname: string,
-        email: string,
-        password: string,
-    ): Promise<User> {
-        const isExists: boolean = await UserService.checkUser(nickname, email)
-        if (isExists) {
-            throw new AlreadyUserExistsException()
-        }
-
-        const user: User = new User()
-        user.uuid = uuid.v4()
-        user.nickname = nickname
-        user.email = email
-        user.password = password
-
-        return await getManager()
-            .getRepository(User)
-            .save(user)
-    }
-
-    /**
-     * Check if user exists
-     * @param nickname Nickname of the new user
-     * @param email Email of the new user
-     */
-    public static async checkUser(
-        nickname: string,
-        email: string,
-    ): Promise<boolean> {
-        const countUser: number = await getManager()
-            .getRepository(User)
-            .count({
-                where: [{ nickname }, { email }],
-            })
-
-        return countUser > 0
     }
 }

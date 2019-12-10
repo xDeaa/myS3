@@ -1,6 +1,6 @@
 import logfmt from 'logfmt'
 
-export class Logger {
+export default class Logger {
     public static traceLog(
         message: string,
         detail?: string,

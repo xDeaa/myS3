@@ -5,11 +5,10 @@ import {
     ManyToOne,
     OneToMany,
 } from 'typeorm'
-import { User } from './User.entity'
-import { Blob } from './Blob.entity'
+import { User, Blob } from '.'
 
 @Entity('bucket')
-export class Bucket {
+export default class Bucket {
     @PrimaryGeneratedColumn()
     id: number
 

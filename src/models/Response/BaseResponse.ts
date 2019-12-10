@@ -5,7 +5,7 @@ interface IBaseResponse {
     toJSON(): object | null
 }
 
-export class BaseResponse implements IBaseResponse {
+export default class BaseResponse implements IBaseResponse {
     public readonly statusCode: number
 
     constructor(statusCode: number) {

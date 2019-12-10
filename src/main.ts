@@ -6,6 +6,15 @@ import { Logger } from './controllers/Logger'
 import entities from './entities'
 import { RouteBuilder } from './routes/RouterBuilder'
 import 'reflect-metadata'
+import { AppAttributes } from './models'
+
+declare global {
+    namespace Express {
+        export interface Request {
+            attributes: AppAttributes
+        }
+    }
+}
 
 // Init variables ENVs
 dotenv.config()

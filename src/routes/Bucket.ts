@@ -18,6 +18,7 @@ class BucketRoutes extends BaseRoute {
             '/:id',
             BucketValidation.BucketParameter,
             handleError,
+            checkBucketExists,
             BucketController.checkBucket,
         )
 
@@ -27,18 +28,21 @@ class BucketRoutes extends BaseRoute {
             '/',
             BucketValidation.FieldsNecessary,
             handleError,
+            checkBucketExists,
             BucketController.createBucket,
         )
         this.router.put(
             '/:id',
             BucketValidation.UpdateParameter,
             handleError,
+            checkBucketExists,
             BucketController.updateBucket,
         )
         this.router.delete(
             '/:id',
             BucketValidation.BucketParameter,
             handleError,
+            checkBucketExists,
             BucketController.deleteBucket,
         )
     }

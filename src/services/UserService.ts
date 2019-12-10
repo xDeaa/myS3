@@ -12,7 +12,7 @@ export default class UserService {
     /**
      * Find all users
      */
-    public static async getAllUsers(): Promise<User[]> {
+    public static getAllUsers(): Promise<User[]> {
         return getManager()
             .getRepository(User)
             .find()

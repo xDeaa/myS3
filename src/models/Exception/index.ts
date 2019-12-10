@@ -4,6 +4,8 @@ import UserNotExistsException from './UserNotExistsException'
 import BucketNotExistsException from './BucketNotExistsException'
 import AlreadyBucketExistsException from './AlreadyBucketExistsException'
 import EmailOrPasswordWrongException from './EmailOrPasswordWrongException'
+import UnAuthorizedException from './UnAuthorizedException'
+import AlreadyConnectedException from './AlreadyConnectedException'
 
 export {
     InternalErrorException,
@@ -12,4 +14,6 @@ export {
     BucketNotExistsException,
     AlreadyBucketExistsException,
     EmailOrPasswordWrongException,
+    UnAuthorizedException,
+    AlreadyConnectedException,
 }

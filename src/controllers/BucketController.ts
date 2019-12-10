@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { ResponseData } from '../models'
 import { BucketService } from '../services'
+import { Bucket } from '../entities'
 
 export default class BucketController {
     public static getBuckets = async (
@@ -9,8 +10,7 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { uuid } = req.params
-            const buckets: BucketService = await BucketService.getBuckets(uuid)
+            const buckets: Bucket[] = await BucketService.getBuckets(req.attributes.user)
 
             return new ResponseData(200, { buckets }).sendJson(res)
         } catch (e) {
@@ -24,10 +24,9 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { uuid, id } = req.params
-            const bucket: BucketService = await BucketService.isBucketExists(
-                uuid,
-                parseInt(id),
+            const bucket: Bucket = await BucketService.getBucket(
+                req.attributes.user,
+                parseInt(req.params.id),
             )
 
             return new ResponseData(!bucket ? 400 : 200).sendJson(res)
@@ -42,12 +41,11 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { name } = req.body
-            const { uuid } = req.params
-            const bucket: BucketService = await BucketService.saveBucket(
-                name,
-                uuid,
-            )
+            const newBucket: Bucket = new Bucket()
+            newBucket.name = req.body.name
+            newBucket.user = req.attributes.user
+
+            const bucket: BucketService = await BucketService.saveBucket(newBucket)
 
             return new ResponseData(200, { bucket }).sendJson(res)
         } catch (e) {
@@ -61,13 +59,11 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { id } = req.params
-            const { name } = req.body
-            const bucket: BucketService = await BucketService.updateBucket(
-                parseInt(id),
-                name,
-            )
-            return new ResponseData(200, { bucket }).sendJson(res)
+            const { bucket } = req.attributes
+            bucket.name = req.body.name
+            const bucketUpdate: BucketService = await BucketService.updateBucket(bucket)
+            
+            return new ResponseData(200, { bucket: bucketUpdate }).sendJson(res)
         } catch (e) {
             next(e)
         }
@@ -79,8 +75,7 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { id } = req.params
-            await BucketService.deleteBucket(parseInt(id))
+            await BucketService.deleteBucket(parseInt(req.params.id))
 
             return new ResponseData(200, {
                 msg: 'Successfully deleted',

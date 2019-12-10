@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-export class BaseRoute {
+export default class BaseRoute {
     public router = Router({
         mergeParams: true,
     })

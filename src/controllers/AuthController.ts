@@ -29,7 +29,7 @@ export default class AuthController {
                 { uuid: user.uuid, password: user.password },
                 'secretKey',
             )
-            await MailService.sendEmail()
+            await MailService.sendUserEmailCreation(user.nickname, user.email)
 
             return new ResponseData(200, { ...rawUser, token }).sendJson(res)
         } catch (e) {

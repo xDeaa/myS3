@@ -1,4 +1,4 @@
-import { Logger } from '../../controllers/Logger'
+import Logger from '../../controllers/Logger'
 import BaseResponse from './BaseResponse'
 
 export default class ResponseData<T extends object> extends BaseResponse {

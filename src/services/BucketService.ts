@@ -1,6 +1,9 @@
 import { getManager, DeleteResult } from 'typeorm'
 import { User, Bucket } from '../entities'
-import { AlreadyBucketExistsException, BucketNotExistsException } from '../models/Exception'
+import {
+    AlreadyBucketExistsException,
+    BucketNotExistsException,
+} from '../models/Exception'
 
 export default class BucketService {
     /**
@@ -18,10 +21,7 @@ export default class BucketService {
      * @param user User who own the bucket to retrieve
      * @param id Id of bucket
      */
-    public static async getBucket(
-        user: User,
-        id: number,
-    ): Promise<Bucket> {
+    public static async getBucket(user: User, id: number): Promise<Bucket> {
         const bucket = await getManager()
             .getRepository(Bucket)
             .findOne({ id, user })
@@ -29,7 +29,7 @@ export default class BucketService {
         if (!bucket) {
             throw new BucketNotExistsException()
         }
-        return bucket;
+        return bucket
     }
 
     /**

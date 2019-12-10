@@ -10,7 +10,9 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const buckets: Bucket[] = await BucketService.getBuckets(req.attributes.user)
+            const buckets: Bucket[] = await BucketService.getBuckets(
+                req.attributes.user,
+            )
 
             return new ResponseData(200, { buckets }).sendJson(res)
         } catch (e) {
@@ -45,7 +47,9 @@ export default class BucketController {
             newBucket.name = req.body.name
             newBucket.user = req.attributes.user
 
-            const bucket: BucketService = await BucketService.saveBucket(newBucket)
+            const bucket: BucketService = await BucketService.saveBucket(
+                newBucket,
+            )
 
             return new ResponseData(200, { bucket }).sendJson(res)
         } catch (e) {
@@ -61,8 +65,10 @@ export default class BucketController {
         try {
             const { bucket } = req.attributes
             bucket.name = req.body.name
-            const bucketUpdate: BucketService = await BucketService.updateBucket(bucket)
-            
+            const bucketUpdate: BucketService = await BucketService.updateBucket(
+                bucket,
+            )
+
             return new ResponseData(200, { bucket: bucketUpdate }).sendJson(res)
         } catch (e) {
             next(e)

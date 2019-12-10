@@ -7,7 +7,10 @@ import jwt from 'jsonwebtoken'
 import { User } from '../entities'
 import { UserService, BucketService } from '../services'
 import { AppAttributes } from '../models'
-import { UnAuthorizedException, AlreadyConnectedException } from '../models/Exception'
+import {
+    UnAuthorizedException,
+    AlreadyConnectedException,
+} from '../models/Exception'
 
 export const handleBaseMiddleware = (router: Router): void => {
     // Handle body request parsing
@@ -20,7 +23,7 @@ export const handleBaseMiddleware = (router: Router): void => {
         try {
             req.attributes = {} as AppAttributes
             next()
-        } catch(e) {
+        } catch (e) {
             next(e)
         }
     })

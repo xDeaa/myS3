@@ -4,7 +4,7 @@ import UserRoutes from './User'
 import AuthRoutes from './Auth'
 
 class ApiRoutes extends BaseRoute {
-    public initializeRoutes(): void {        
+    public initializeRoutes(): void {
         this.router.use('/users', handleAuth, UserRoutes)
         this.router.use('/auth', handleNotAuth, AuthRoutes)
     }

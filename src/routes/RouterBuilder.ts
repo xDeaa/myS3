@@ -9,11 +9,11 @@ export class RouteBuilder {
     public static build(app: Application): void {
         // Apply middlewares
         handleBaseMiddleware(app)
-        
+
         if (process.env.NODE_ENV !== 'production') {
             app.use(logfmt.requestLogger())
         }
-        
+
         app.use('/api', ApiRouter)
         app.use(RouteBuilder.catchErrors, RouteBuilder.route404)
     }

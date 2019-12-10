@@ -5,7 +5,7 @@ import { Router, NextFunction, Request, Response } from 'express'
 import { Validation } from '../controllers/Validation'
 import jwt from 'jsonwebtoken'
 import { User } from '../entities'
-import { UserService, BucketService } from '../services'
+import { UserService, BucketService, BlobService } from '../services'
 import { AppAttributes } from '../models'
 import {
     UnAuthorizedException,
@@ -119,12 +119,29 @@ export const checkBucketExists = async (
     _: Response,
     next: NextFunction,
 ): Promise<void> => {
-    const { id } = req.params
-    const { user } = req.attributes
-
     try {
-        const bucket = await BucketService.getBucket(user, parseInt(id))
+        const bucket = await BucketService.getBucket(
+            req.attributes.user,
+            parseInt(req.params.id),
+        )
         req.attributes.bucket = bucket
+        next()
+    } catch (e) {
+        next(e)
+    }
+}
+
+export const checkBlobExists = async (
+    req: Request,
+    _: Response,
+    next: NextFunction,
+): Promise<void> => {
+    try {
+        const blob = await BlobService.getBlob(
+            req.attributes.bucket,
+            parseInt(req.params.blobId),
+        )
+        req.attributes.blob = blob
         next()
     } catch (e) {
         next(e)

@@ -26,12 +26,12 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const bucket: Bucket = await BucketService.getBucket(
+            const isBucket = await BucketService.isBucketExists(
                 req.attributes.user,
                 parseInt(req.params.id),
             )
 
-            return new ResponseData(!bucket ? 400 : 200).sendJson(res)
+            return new ResponseData(isBucket ? 200 : 400).sendJson(res)
         } catch (e) {
             next(e)
         }
@@ -81,7 +81,7 @@ export default class BucketController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            await BucketService.deleteBucket(parseInt(req.params.id))
+            await BucketService.deleteBucket(req.attributes.bucket)
 
             return new ResponseData(200, {
                 msg: 'Successfully deleted',

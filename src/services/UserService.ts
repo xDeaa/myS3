@@ -1,4 +1,3 @@
-import { hashPassword } from './../utils/Utils'
 import { getManager, DeleteResult } from 'typeorm'
 import uuid from 'uuid'
 import { User } from '../entities'
@@ -52,12 +51,12 @@ export default class UserService {
 
     /**
      * Delete a specific user
-     * @param uuid UUID of the user to delete
+     * @param user User to delete
      */
-    public static async deleteUser(uuid: string): Promise<void> {
+    public static async deleteUser(user: User): Promise<void> {
         const userDeleted: DeleteResult = await getManager()
             .getRepository(User)
-            .delete(uuid)
+            .delete(user.uuid)
 
         if (!userDeleted || userDeleted.affected === 0) {
             throw new UserNotExistsException()
@@ -66,35 +65,12 @@ export default class UserService {
 
     /**
      * Update a specific user
-     * @param uuid UUID of the user to update
+     * @param user User to update
      */
-    public static async updateUser(
-        uuid: string,
-        nickname: string,
-        email: string,
-        password: string,
-    ): Promise<User> {
-        const userFound: User | undefined = await getManager()
-            .getRepository(User)
-            .findOne(uuid)
-
-        if (!userFound) {
-            throw new UserNotExistsException()
-        }
-
-        if (nickname) {
-            userFound.nickname = nickname
-        }
-        if (email) {
-            userFound.email = email
-        }
-        if (password) {
-            userFound.password = await hashPassword(password)
-        }
-
+    public static async updateUser(user: User): Promise<User> {
         return getManager()
             .getRepository(User)
-            .save(userFound)
+            .save(user)
     }
 
     /**

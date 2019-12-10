@@ -33,13 +33,22 @@ export default class UserController {
     ): Promise<void> => {
         try {
             const { nickname, email, password } = req.body
-            const user = await UserService.updateUser(
-                req.params.uuid,
-                nickname,
-                email,
-                password,
-            )
-            return new ResponseData(200, { user }).sendJson(res)
+            const { user } = req.attributes
+
+            if (nickname) {
+                user.nickname = nickname
+            }
+
+            if (email) {
+                user.email = email
+            }
+
+            if (password) {
+                user.password = password
+            }
+
+            const userUpdate = await UserService.updateUser(user)
+            return new ResponseData(200, { user: userUpdate }).sendJson(res)
         } catch (e) {
             next(e)
         }
@@ -51,7 +60,7 @@ export default class UserController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            await UserService.deleteUser(req.params.uuid)
+            await UserService.deleteUser(req.attributes.user)
             return new ResponseData(200, {
                 msg: 'Successfully deleted',
             }).sendJson(res)

@@ -6,7 +6,7 @@ import BlobRoutes from './Blob'
 
 class BucketRoutes extends BaseRoute {
     public initializeRoutes(): void {
-        this.router.get(
+        this.router.use(
             '/:id/blobs',
             BucketValidation.BucketParameter,
             handleError,
@@ -18,7 +18,6 @@ class BucketRoutes extends BaseRoute {
             '/:id',
             BucketValidation.BucketParameter,
             handleError,
-            checkBucketExists,
             BucketController.checkBucket,
         )
 
@@ -28,7 +27,6 @@ class BucketRoutes extends BaseRoute {
             '/',
             BucketValidation.FieldsNecessary,
             handleError,
-            checkBucketExists,
             BucketController.createBucket,
         )
         this.router.put(

@@ -17,6 +17,22 @@ export default class BucketService {
     }
 
     /**
+     * Check if a specific bucket exists
+     * @param user User who own the bucket to retrieve
+     * @param id Id of bucket
+     */
+    public static async isBucketExists(
+        user: User,
+        id: number,
+    ): Promise<boolean> {
+        const bucketCount = await getManager()
+            .getRepository(Bucket)
+            .count({ id, user })
+
+        return bucketCount > 0
+    }
+
+    /**
      * Get a specific bucket
      * @param user User who own the bucket to retrieve
      * @param id Id of bucket
@@ -64,10 +80,10 @@ export default class BucketService {
      * Delete a bucket
      * @param id id of the user to retrieve
      */
-    public static async deleteBucket(id: number): Promise<void> {
+    public static async deleteBucket(bucket: Bucket): Promise<void> {
         const deletedBucket: DeleteResult = await getManager()
             .getRepository(Bucket)
-            .delete(id)
+            .delete(bucket.id)
 
         if (!deletedBucket || deletedBucket.affected === 0) {
             throw new BucketNotExistsException()

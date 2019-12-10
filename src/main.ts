@@ -6,6 +6,7 @@ import { Logger } from './controllers/Logger'
 import entities from './entities'
 import { RouteBuilder } from './routes/RouterBuilder'
 import 'reflect-metadata'
+// eslint-disable-next-line
 import { AppAttributes } from './models'
 
 declare global {
@@ -49,6 +50,7 @@ const typeOrmConfig: MysqlConnectionOptions = {
     database: MYSQL_BASE,
     entities: Object.values(entities),
     synchronize: true,
+    charset: 'utf8mb4_unicode_ci',
 }
 createConnection(typeOrmConfig)
     .then(() => {

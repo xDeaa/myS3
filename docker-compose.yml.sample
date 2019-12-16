@@ -11,7 +11,7 @@ services:
       MYSQL_ROOT_PASSWORD: pass
     
   my_s3:
-    build: .
+    build: ./backend/
     ports:
       - 80:80
     links:

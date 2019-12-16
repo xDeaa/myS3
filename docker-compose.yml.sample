@@ -27,3 +27,8 @@ services:
       APP_ENV: "dev"
       APP_LOG_LEVEL: "info"
       STORAGE_PATH: "/myS3DATA/"
+       
+  frontend:
+    build: ./frontend/
+    ports:
+      - 80:80

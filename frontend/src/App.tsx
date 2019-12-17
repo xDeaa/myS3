@@ -2,13 +2,7 @@ import React from 'react';
 import NavBar from './components/NavBar';
 import { Layout } from 'antd'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import BucketsPage from './pages/BucketsPage';
-import Page404 from './pages/Page404';
-import Home from './pages/Home';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-
-
+import { Home, BucketsPage, LoginPage, RegisterPage , BlobPage , Page404} from './pages';
 
 const App = () => (
   <Router>
@@ -21,6 +15,7 @@ const App = () => (
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/account" component={Home} />
+          <Route path="/blob" component={BlobPage} />
           <Route path="*" component={Page404} />
         </Switch>
       </Layout.Content>

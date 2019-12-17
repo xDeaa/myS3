@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormComponentProps } from 'antd/lib/form';
-import { Form, Icon, Input, Button, Tooltip } from "antd";
+import { Form, Icon, Input, Button } from "antd";
 import { Link } from 'react-router-dom';
 
 interface UserFormProps extends FormComponentProps {
@@ -18,13 +18,6 @@ const RegisterForm = (props: UserFormProps) => {
                 console.log('Received values of form: ', values);
             }
         });
-    };
-
-    const formItemLayout = {
-        wrapperCol: {
-            xs: { span: 24 },
-            sm: { span: 6 },
-        },
     };
 
     return (

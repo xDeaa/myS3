@@ -4,6 +4,7 @@ import compression from 'compression'
 import { Router, NextFunction, Request, Response } from 'express'
 import { Validation } from '../controllers/Validation'
 import jwt from 'jsonwebtoken'
+import cors from 'cors'
 import { User } from '../entities'
 import { UserService, BucketService, BlobService } from '../services'
 import { AppAttributes } from '../models'
@@ -13,6 +14,7 @@ import {
 } from '../models/Exception'
 
 export const handleBaseMiddleware = (router: Router): void => {
+    router.use(cors());
     // Handle body request parsing
     router.use(parser.urlencoded({ extended: true }), parser.json())
 

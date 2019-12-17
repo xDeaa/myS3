@@ -6,7 +6,7 @@ type PageContentProps = {
     title: string
 }
 
-const PageContent: React.FC<PageContentProps> = ({breadcrumbPages, title, children}) => {
+const PageContent: React.FC<PageContentProps> = ({ breadcrumbPages, title, children }) => {
     return (
         <>
             <BreadcrumbPage pages={breadcrumbPages} />

@@ -25,7 +25,8 @@ const LoginForm = (props: UserFormProps) => {
             <Form onSubmit={handleSubmit} style={{ maxWidth: 300 }}>
                 <Form.Item>
                     {getFieldDecorator('email', {
-                        rules: [{ required: true, message: 'Please input your email!' }],
+                        rules: [{ required: true, message: 'Please input your email!'},
+                        {type: 'email', message: 'The input is not valid E-mail!'},],
                     })(
                         <Input
                             prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -35,7 +36,7 @@ const LoginForm = (props: UserFormProps) => {
                 </Form.Item>
                 <Form.Item>
                     {getFieldDecorator('password', {
-                        rules: [{ required: true, message: 'Please input your Password!' }],
+                        rules: [{ required: true, message: 'Please input your Password!'}],
                     })(
                         <Input
                             prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}

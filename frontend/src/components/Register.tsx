@@ -28,20 +28,13 @@ const RegisterForm = (props: UserFormProps) => {
     };
 
     return (
-        <div style={{display: "flex" , justifyContent: "center"}}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
             <Form onSubmit={handleSubmit} style={{ maxWidth: 300 }}>
                 <Form.Item>
                     {getFieldDecorator('email', {
                         rules: [
-                            {
-                                type: 'email',
-                                message: 'The input is not valid E-mail!',
-                            },
-                            {
-                                required: true,
-                                message: 'Please input your E-mail!',
-                            },
-                        ],
+                            { type: 'email', message: 'The input is not valid E-mail!' },
+                            { required: true, message: 'Please input your E-mail!' }],
                     })(<Input
                         prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
                         placeholder="Email"
@@ -50,12 +43,8 @@ const RegisterForm = (props: UserFormProps) => {
                 </Form.Item>
                 <Form.Item hasFeedback>
                     {getFieldDecorator('password', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please input your password!',
-                            }
-                        ],
+                        rules: [{ required: true, message: 'Please input your password!'},
+                            { len: 6, message: 'Your password must have 6 characters!' }],
                     })(<Input.Password
                         prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                         type="password"
@@ -69,7 +58,7 @@ const RegisterForm = (props: UserFormProps) => {
                         prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                         type="nickname"
                         placeholder="Nickname"
-                    />,)}
+                    />)}
                     <Button type="primary" htmlType="submit" style={{ width: '100%' }}> Register </Button>
                     Or <Link to="/login">log in now!</Link>
                 </Form.Item>

@@ -1,6 +1,6 @@
 import React from 'react'
 import BucketList from '../components/BucketList'
-import BreadcrumbPage from '../components/Breadcrumb'
+import PageContent from '../components/PageContent'
 
 const breadcrumbPages = [
     {
@@ -11,11 +11,9 @@ const breadcrumbPages = [
 
 const BucketsPage = () => {
     return (
-        <>
-            <BreadcrumbPage pages={breadcrumbPages} />
-            <h1>Buckets</h1>
+        <PageContent title="Buckets" breadcrumbPages={breadcrumbPages}>
             <BucketList />
-        </>
+        </PageContent>
     )
 }
 

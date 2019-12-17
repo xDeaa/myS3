@@ -2,10 +2,15 @@ import React from 'react';
 import NavBar from './components/NavBar';
 import BucketList from './components/BucketList';
 import { Layout, Breadcrumb } from 'antd'
+import FormLogin from './components/Login';
+import FormRegister from './components/Register';
+
 
 const App = () => {
   return (
     <Layout className="layout">
+      <FormLogin/>
+      <FormRegister />
       <NavBar isLogged={false} />
       <Layout.Content style={{ padding: '0 50px' }}>
         <Breadcrumb style={{ margin: '16px 0' }}>
@@ -14,7 +19,7 @@ const App = () => {
           <Breadcrumb.Item>App</Breadcrumb.Item>
         </Breadcrumb>
         <h1>Buckets</h1>
-        <BucketList />
+       <BucketList />
       </Layout.Content>
       <Layout.Footer style={{ textAlign: 'center' }}>
         Ant Design ©2018 Created by Ant UED

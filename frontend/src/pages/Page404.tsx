@@ -1,10 +1,14 @@
 import React from 'react'
-import PageContent from '../components/PageContent'
+import { Link } from 'react-router-dom'
+import { Result, Button } from 'antd'
 
 const Page404 = () => (
-    <PageContent title="Page not found">
-
-    </PageContent>
+    <Result
+        status="404"
+        title="404"
+        subTitle="Sorry, the page you visited does not exist."
+        extra={<Button type="primary" href="/"><Link to="/">Back Home</Link></Button>}
+    />
 )
 
 export default Page404

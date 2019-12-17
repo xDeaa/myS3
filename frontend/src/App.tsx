@@ -1,31 +1,32 @@
 import React from 'react';
 import NavBar from './components/NavBar';
-import BucketList from './components/BucketList';
-import { Layout, Breadcrumb } from 'antd'
+import { Layout } from 'antd'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import BucketsPage from './pages/BucketsPage';
+import Page404 from './pages/Page404';
 import FormLogin from './components/Login';
 import FormRegister from './components/Register';
+import Home from './pages/Home';
 
-
-const App = () => {
-  return (
+const App = () => (
+  <Router>
     <Layout className="layout">
-      <FormLogin/>
-      <FormRegister />
       <NavBar isLogged={false} />
       <Layout.Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
-        <h1>Buckets</h1>
-       <BucketList />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/buckets" component={BucketsPage} />
+          <Route exact path="/login" component={FormLogin} />
+          <Route exact path="/register" component={FormRegister} />
+          <Route exact path="/account" component={Home} />
+          <Route path="*" component={Page404} />
+        </Switch>
       </Layout.Content>
       <Layout.Footer style={{ textAlign: 'center' }}>
         Ant Design ©2018 Created by Ant UED
       </Layout.Footer>
     </Layout>
-  );
-}
+  </Router>
+)
 
 export default App;

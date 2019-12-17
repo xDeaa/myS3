@@ -1,6 +1,7 @@
 import React from 'react'
 import { FormComponentProps } from 'antd/lib/form';
 import { Form, Icon, Input, Button, Tooltip } from "antd";
+import { Link } from 'react-router-dom';
 
 interface UserFormProps extends FormComponentProps {
     //email: string;
@@ -70,7 +71,7 @@ const RegisterForm = (props: UserFormProps) => {
                         placeholder="Nickname"
                     />,)}
                     <Button type="primary" htmlType="submit" style={{ width: '100%' }}> Register </Button>
-                    Or <a href="">log in now!</a>
+                    Or <Link to="/login">log in now!</Link>
                 </Form.Item>
             </Form>
         </div>

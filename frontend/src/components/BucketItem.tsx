@@ -13,11 +13,7 @@ type BucketItemProps = {
 
 const BucketItem = ({ title, onClick }: BucketItemProps) => {
     return (
-        <div
-            className="bx--col-sm-2 bx--col-lg-4 bx--col-xlg-3"
-            style={BucketItemStyle}
-            onClick={(_) => onClick()}
-        >
+        <div style={BucketItemStyle} onClick={(_) => onClick()}>
             <h3>{title}</h3>
         </div>
     )

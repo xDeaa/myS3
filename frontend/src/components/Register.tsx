@@ -1,24 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FormComponentProps } from 'antd/lib/form';
 import { Form, Icon, Input, Button } from "antd";
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import superagent from 'superagent'
+import { URL } from '../api/data';
+import User from '../api/models/User';
 
-interface UserFormProps extends FormComponentProps {
-    //email: string;
-    //password: string;
-}
-
-const RegisterForm = (props: UserFormProps) => {
+const RegisterForm = (props: FormComponentProps) => {
+    const [user, setUser] = useState<User>()
+    const [registered, setRegistered] = useState(false)
     const { getFieldDecorator } = props.form
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                const { nickname, email, password } = values        
+                register(nickname, email, password)
             }
         });
     };
+
+    const register = async (nickname: string, email: string, password: string) => {
+        try {
+            const response = await superagent.post(`${URL}/auth/register`)
+            .set( "Content-Type", "application/x-www-form-urlencoded")
+            .send({nickname, email, password})
+
+            const result : User = response.body.data as User
+            setUser(result)
+            setRegistered(true)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
@@ -56,10 +71,16 @@ const RegisterForm = (props: UserFormProps) => {
                     Or <Link to="/login">log in now!</Link>
                 </Form.Item>
             </Form>
+            {
+            registered ? (<Redirect to={{
+                pathname: '/buckets',
+                state: { user }
+            }}/> ) : <></>
+            }
         </div>
     );
 }
 
-const FormRegister = Form.create<UserFormProps>({ name: 'login' })(RegisterForm);
+const FormRegister = Form.create<FormComponentProps>({ name: 'login' })(RegisterForm);
 
 export default FormRegister

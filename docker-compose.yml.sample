@@ -13,12 +13,12 @@ services:
   my_s3:
     build: ./backend/
     ports:
-      - 80:80
+      - 8080:8080
     links:
       - my_mysql:mysql
     restart: always
     environment:
-      PORT: 80
+      PORT: 8080
       MYSQL_HOST: mysql
       MYSQL_BASE: myS3
       MYSQL_USER: myS3User

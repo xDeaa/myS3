@@ -5,9 +5,11 @@ import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
 import BlobModel from '../api/models/Blob';
 import { URL, APIKEY } from '../api/data';
+import User from '../api/models/User';
 
 type BlobsListProps = {
     bucket: Bucket
+    user: User
 }
 
 // TODO: Add to a util function
@@ -16,7 +18,7 @@ const displaySize = (size: number): string => {
     return `${(size / Math.pow(1024, i)).toFixed(2)} ${['B', 'kB', 'MB', 'GB', 'TB'][i]}`;
 }
 
-const BlobsList = ({ bucket }: BlobsListProps) => {
+const BlobsList = ({ bucket, user }: BlobsListProps) => {
     const [blobs, setBlobs] = useState<BlobModel[] | null>()
 
     useEffect(() => {
@@ -29,8 +31,8 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
         }
         // TODO: Call api
         // Simulate api call
-        const response = await superagent.get(`${URL}/users/b97cc746-201a-4b8b-bf12-5765d9e114db/buckets/${bucket.id}/blobs`)
-            .set("Authorization", APIKEY)
+        const response = await superagent.get(`${URL}/users/${user.uuid}/buckets/${bucket.id}/blobs`)
+            .set("Authorization", user.token)
             .send()
 
         const result: BlobModel[] = response.body.data.blobs
@@ -75,8 +77,8 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
 
             <Upload
                 method="post"
-                action={`${URL}/users/b97cc746-201a-4b8b-bf12-5765d9e114db/buckets/${bucket.id}/blobs`}
-                headers={{ "Authorization": APIKEY }}
+                action={`${URL}/users/${user.uuid}/buckets/${bucket.id}/blobs`}
+                headers={{ "Authorization": user.token }}
                 name="blob"
                 listType="text"
                 onChange={handleChange}

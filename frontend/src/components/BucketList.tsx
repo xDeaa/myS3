@@ -3,13 +3,15 @@ import { Menu, Spin, } from 'antd'
 import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
 import { APIKEY, URL } from '../api/data';
+import User from '../api/models/User';
 
 type OnBucketSelect = (bucket: Bucket) => void;
 type BucketListProps = {
     onBucketSelect: OnBucketSelect
+    user: User
 }
 
-const BucketList = ({ onBucketSelect }: BucketListProps) => {
+const BucketList = ({ onBucketSelect, user}: BucketListProps) => {
     const [buckets, setBuckets] = useState<Bucket[]>()
 
     useEffect(() => {
@@ -17,12 +19,12 @@ const BucketList = ({ onBucketSelect }: BucketListProps) => {
     }, [])
 
     const fetchBuckets = async () => {
-        const response = await superagent.get(`${URL}/users/b97cc746-201a-4b8b-bf12-5765d9e114db/buckets`)
-            .set("Authorization", APIKEY)
+        const response = await superagent.get(`${URL}/users/${user.uuid}/buckets`)
+            .set("Authorization", user.token)
             .send()
 
         // TODO: Add statusCode check
-        const result: Bucket[] = response.body.data.buckets as Bucket[]
+        const result: Bucket[] = response.body.data.buckets
         setBuckets(result)
         if (result && result.length > 0) {
             onBucketSelect(result[0])

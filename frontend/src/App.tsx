@@ -4,9 +4,11 @@ import { Layout } from 'antd'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import BucketsPage from './pages/BucketsPage';
 import Page404 from './pages/Page404';
-import FormLogin from './components/Login';
-import FormRegister from './components/Register';
 import Home from './pages/Home';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+
+
 
 const App = () => (
   <Router>
@@ -16,8 +18,8 @@ const App = () => (
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/buckets" component={BucketsPage} />
-          <Route exact path="/login" component={FormLogin} />
-          <Route exact path="/register" component={FormRegister} />
+          <Route exact path="/login" component={LoginPage} />
+          <Route exact path="/register" component={RegisterPage} />
           <Route exact path="/account" component={Home} />
           <Route path="*" component={Page404} />
         </Switch>

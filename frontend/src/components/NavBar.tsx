@@ -1,6 +1,5 @@
 import React from "react";
-import { User20 } from "@carbon/icons-react";
-import { Header, HeaderName, HeaderGlobalAction, HeaderGlobalBar } from "carbon-components-react";
+import { Layout, Menu, Icon } from "antd";
 
 type NavBarProps = {
     isLogged: boolean
@@ -15,21 +14,21 @@ const NavBar = ({ isLogged }: NavBarProps) => {
         console.log("Login");
     }
 
-    const renderActions = () => (
-        <HeaderGlobalAction aria-label={isLogged ? "My Account" : "Login"} onClick={isLogged ? onUserClick : onLoginClick}>
-            <User20 />
-        </HeaderGlobalAction>
-    )
-
     return (
-        <Header aria-label="MyS3">
-            <HeaderName href="/" prefix="">
-                MyS3
-                </HeaderName>
-            <HeaderGlobalBar>
-                {renderActions()}
-            </HeaderGlobalBar>
-        </Header>
+        <Layout.Header aria-label="MyS3">
+            <Menu theme="dark" mode="horizontal" style={{ lineHeight: '64px' }}>
+                <Menu.Item key="1">
+                    MyS3
+                </Menu.Item>
+                <Menu.Item key="2" style={{ float: 'right' }}>
+                    <Icon
+                        type="user"
+                        title={isLogged ? "My Account" : "Login"}
+                        onClick={isLogged ? onUserClick : onLoginClick}
+                    />
+                </Menu.Item>
+            </Menu>
+        </Layout.Header>
     );
 }
 

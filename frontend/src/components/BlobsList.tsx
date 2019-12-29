@@ -4,7 +4,7 @@ import { UploadChangeParam } from 'antd/lib/upload/interface';
 import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
 import BlobModel from '../api/models/Blob';
-import { URL, APIKEY } from '../api/data';
+import { URL } from '../api/data';
 import User from '../api/models/User';
 
 type BlobsListProps = {
@@ -23,20 +23,18 @@ const BlobsList = ({ bucket, user }: BlobsListProps) => {
 
     useEffect(() => {
         fetchBlobs(true)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bucket])
 
-    const fetchBlobs = async (resetBlobs: boolean) => {
+    const fetchBlobs = async (resetBlobs: boolean): Promise<BlobModel[]> => {
         if (resetBlobs) {
             setBlobs(null)
         }
-        // TODO: Call api
-        // Simulate api call
         const response = await superagent.get(`${URL}/users/${user.uuid}/buckets/${bucket.id}/blobs`)
             .set("Authorization", user.token)
             .send()
 
-        const result: BlobModel[] = response.body.data.blobs
-        setBlobs(result)
+        return response.body.data.blobs
     }
 
     const downloadFile = (blob: BlobModel) => {
@@ -68,11 +66,10 @@ const BlobsList = ({ bucket, user }: BlobsListProps) => {
                     ))}
                 </Row>
             ) : (
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Spin />
-                    </div>
-                )}
-
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Spin />
+                </div>
+            )}
             < Divider />
 
             <Upload

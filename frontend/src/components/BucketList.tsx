@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Menu, Spin, } from 'antd'
 import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
-import { APIKEY, URL } from '../api/data';
+import { URL } from '../api/data';
 import User from '../api/models/User';
 
 type OnBucketSelect = (bucket: Bucket) => void;
@@ -16,7 +16,7 @@ const BucketList = ({ onBucketSelect, user}: BucketListProps) => {
 
     useEffect(() => {
         fetchBuckets()
-    }, [])
+    })
 
     const fetchBuckets = async () => {
         const response = await superagent.get(`${URL}/users/${user.uuid}/buckets`)

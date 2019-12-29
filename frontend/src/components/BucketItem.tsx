@@ -11,12 +11,10 @@ type BucketItemProps = {
     onClick: Function
 }
 
-const BucketItem = ({ title, onClick }: BucketItemProps) => {
-    return (
-        <div style={BucketItemStyle} onClick={(_) => onClick()}>
-            <h3>{title}</h3>
-        </div>
-    )
-}
+const BucketItem = ({ title, onClick }: BucketItemProps) => (
+    <div style={BucketItemStyle} onClick={(_) => onClick()}>
+        <h3>{title}</h3>
+    </div>
+)
 
 export default BucketItem

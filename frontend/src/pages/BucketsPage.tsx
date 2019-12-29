@@ -4,7 +4,6 @@ import PageContent from '../components/PageContent'
 import { Col, Row } from 'antd'
 import BlobsList from '../components/BlobsList'
 import Bucket from '../api/models/Bucket'
-import User from '../api/models/User'
 
 const breadcrumbPages = [
     {

@@ -31,6 +31,14 @@ const BucketList = ({ onBucketSelect, user}: BucketListProps) => {
         }
     }
 
+    const buildBuckets = () => {
+        if (!buckets) return <></>
+        if (buckets.length === 0) {
+            return <p>Empty bucket list :/</p>
+        }
+        return buckets.map((e) => <Menu.Item key={e.id} onClick={_ => onBucketSelect(e)}>{e.name}</Menu.Item>)
+    }
+
     if (!buckets) {
         return <Spin />
     }
@@ -42,7 +50,7 @@ const BucketList = ({ onBucketSelect, user}: BucketListProps) => {
             defaultOpenKeys={['sub1']}
             style={{ height: '100%', borderRight: 0 }}
         >
-            {buckets.map((e) => <Menu.Item key={e.id} onClick={_ => onBucketSelect(e)}>{e.name}</Menu.Item>)}
+            {buildBuckets()}
         </Menu>
     )
 }

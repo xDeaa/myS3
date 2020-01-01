@@ -1,33 +1,45 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Menu, Spin, } from 'antd'
 import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
 import { URL } from '../api/data';
-import User from '../api/models/User';
+import UserContext from '../contexts/UserContext';
+import ResponseApi from '../api/models/ResponseApi';
+import BucketsResponse from '../api/response/BucketsResponse';
 
 type OnBucketSelect = (bucket: Bucket) => void;
 type BucketListProps = {
     onBucketSelect: OnBucketSelect
-    user: User
+    latestBucket?: Bucket
 }
 
-const BucketList = ({ onBucketSelect, user}: BucketListProps) => {
+const BucketList = ({ latestBucket, onBucketSelect }: BucketListProps) => {
     const [buckets, setBuckets] = useState<Bucket[]>()
+    const { user } = useContext(UserContext)
 
     useEffect(() => {
+        if (buckets && latestBucket && buckets.some(b => b.id === latestBucket.id)) {
+            setBuckets([...buckets, latestBucket]) // Optimitic UI
+        }
         fetchBuckets()
-    })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [latestBucket])
 
     const fetchBuckets = async () => {
-        const response = await superagent.get(`${URL}/users/${user.uuid}/buckets`)
-            .set("Authorization", user.token)
+        const response = await superagent.get(`${URL}/users/${user!.uuid}/buckets`)
+            .set("Authorization", user!.token)
             .send()
 
         // TODO: Add statusCode check
-        const result: Bucket[] = response.body.data.buckets
-        setBuckets(result)
-        if (result && result.length > 0) {
-            onBucketSelect(result[0])
+        const apiResponse = response.body as ResponseApi<BucketsResponse>
+        if (apiResponse.data) {
+            const result = apiResponse.data.buckets
+            setBuckets(result)
+            if (result.length > 0 && latestBucket && latestBucket.id !== result[0].id) {
+                onBucketSelect(result[0])
+            }
+        } else {
+            setBuckets([])
         }
     }
 

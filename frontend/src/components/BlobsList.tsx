@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Upload, Icon, Button, message, Divider, Card, Row, Col, Spin } from "antd";
 import { UploadChangeParam } from 'antd/lib/upload/interface';
 import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
-import BlobModel from '../api/models/Blob';
+import Blob from '../api/models/Blob';
 import { URL } from '../api/data';
-import User from '../api/models/User';
+import UserContext from '../contexts/UserContext';
+import ResponseApi from '../api/models/ResponseApi';
+import BlobsResponse from '../api/response/BlobsResponse';
 
 type BlobsListProps = {
     bucket: Bucket
-    user: User
 }
 
 // TODO: Add to a util function
@@ -18,26 +19,33 @@ const displaySize = (size: number): string => {
     return `${(size / Math.pow(1024, i)).toFixed(2)} ${['B', 'kB', 'MB', 'GB', 'TB'][i]}`;
 }
 
-const BlobsList = ({ bucket, user }: BlobsListProps) => {
-    const [blobs, setBlobs] = useState<BlobModel[] | null>()
+const BlobsList = ({ bucket }: BlobsListProps) => {
+    const [blobs, setBlobs] = useState<Blob[]>()
+    const { user } = useContext(UserContext)
 
     useEffect(() => {
         fetchBlobs(true)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bucket])
 
-    const fetchBlobs = async (resetBlobs: boolean): Promise<BlobModel[]> => {
+    const fetchBlobs = async (resetBlobs: boolean): Promise<void> => {
         if (resetBlobs) {
-            setBlobs(null)
+            setBlobs(undefined)
         }
-        const response = await superagent.get(`${URL}/users/${user.uuid}/buckets/${bucket.id}/blobs`)
-            .set("Authorization", user.token)
+        const response = await superagent.get(`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs`)
+            .set("Authorization", user!.token)
+            .ok(() => true)
             .send()
 
-        return response.body.data.blobs
+        const apiResponse = response.body as ResponseApi<BlobsResponse>
+        if (apiResponse.data) {
+            setBlobs(apiResponse.data.blobs)
+            return
+        }
+        setBlobs([])
     }
 
-    const downloadFile = (blob: BlobModel) => {
+    const downloadFile = (blob: Blob) => {
         // TODO: Call api to download file
     }
 
@@ -55,7 +63,7 @@ const BlobsList = ({ bucket, user }: BlobsListProps) => {
 
     return (
         <div style={{ padding: 16 }}>
-            {blobs ? (
+            {blobs !== undefined ? (
                 <Row gutter={[16, 16]}>
                     {blobs.map((b) => (
                         <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
@@ -66,16 +74,16 @@ const BlobsList = ({ bucket, user }: BlobsListProps) => {
                     ))}
                 </Row>
             ) : (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Spin />
-                </div>
-            )}
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Spin />
+                    </div>
+                )}
             < Divider />
 
             <Upload
                 method="post"
-                action={`${URL}/users/${user.uuid}/buckets/${bucket.id}/blobs`}
-                headers={{ "Authorization": user.token }}
+                action={`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs`}
+                headers={{ "Authorization": user!.token }}
                 name="blob"
                 listType="text"
                 onChange={handleChange}

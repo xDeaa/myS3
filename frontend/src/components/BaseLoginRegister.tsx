@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Form } from 'antd'
-import { Redirect } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import superagent from 'superagent'
 import ErrorApi from '../api/models/ErrorApi'
 import User from '../api/models/User'
 import { WrappedFormUtils } from 'antd/lib/form/Form'
 import ResponseApi from '../api/models/ResponseApi'
 import { URL } from '../api/data'
+import ErrorMsg from './ErrorMsg'
+import UserContext from '../contexts/UserContext'
 
 export interface LoginValues {
     email: string
@@ -23,11 +25,11 @@ type BaseLoginRegisterProps = {
 }
 
 const BaseLoginRegister: React.FC<BaseLoginRegisterProps> = (props) => {
+    const { setUser } = useContext(UserContext)
     const [error, setError] = useState<ErrorApi>()
-    const [user, setUser] = useState<User>()
-    const [isLogged, setLogged] = useState<boolean>(false)
+    const history = useHistory()
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
             if (!err) {
@@ -51,26 +53,17 @@ const BaseLoginRegister: React.FC<BaseLoginRegisterProps> = (props) => {
         if (apiResponse.error) {
             setError(apiResponse.error)
             setUser(undefined)
-            setLogged(false)
         } else {
             setError(undefined);
             setUser(apiResponse.data)
-            setLogged(true)
+            history.push('/buckets')
         }
-    }
-
-    if (isLogged) {
-        return <Redirect to={{ pathname: '/buckets', state: { user } }} />
     }
 
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
             <Form onSubmit={handleSubmit} style={{ maxWidth: 300 }}>
-                {error && (
-                    <div className="has-error" style={{ marginBottom: 16 }}>
-                        <p className="ant-form-explain">{error.message}</p>
-                    </div>
-                )}
+                <ErrorMsg error={error} />
                 {props.children}
             </Form>
         </div>

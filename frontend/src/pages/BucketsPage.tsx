@@ -4,6 +4,7 @@ import PageContent from '../components/PageContent'
 import { Col, Row } from 'antd'
 import BlobsList from '../components/BlobsList'
 import Bucket from '../api/models/Bucket'
+import AddNewBucketForm from '../components/AddNewBucketForm'
 
 const breadcrumbPages = [
     {
@@ -12,17 +13,18 @@ const breadcrumbPages = [
     }
 ]
 
-const BucketsPage = (props: any) => {
+const BucketsPage = () => {
     const [currentBucket, setCurrentBucket] = useState<Bucket>()
-    const { user } = props.location.state
+
     return (
         <PageContent title="Buckets" breadcrumbPages={breadcrumbPages}>
+            <AddNewBucketForm onNewBucket={setCurrentBucket} />
             <Row>
                 <Col span={6}>
-                    <BucketList onBucketSelect={setCurrentBucket} user={user}/>
+                    <BucketList onBucketSelect={setCurrentBucket} latestBucket={currentBucket} />
                 </Col>
                 <Col span={18}>
-                    {currentBucket && <BlobsList bucket={currentBucket} user={user} />}
+                    {currentBucket && <BlobsList bucket={currentBucket} />}
                 </Col>
             </Row>
         </PageContent>

@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import User from '../api/models/User'
 
-type SetUserFunction = (user?: User) => void
-
 type UserContextProps = {
     user?: User
-    setUser: SetUserFunction
+    setUser: (user?: User) => void
 }
 
 const UserContext = React.createContext<UserContextProps>({

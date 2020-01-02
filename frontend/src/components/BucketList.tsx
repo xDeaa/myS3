@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useImperativeHandle, forwardRef } from 'react'
 import { Menu, Spin, } from 'antd'
 import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
@@ -7,25 +7,32 @@ import UserContext from '../contexts/UserContext';
 import ResponseApi from '../api/models/ResponseApi';
 import BucketsResponse from '../api/response/BucketsResponse';
 
-type OnBucketSelect = (bucket: Bucket) => void;
 type BucketListProps = {
-    onBucketSelect: OnBucketSelect
-    latestBucket?: Bucket
+    onBucketSelect: (bucket: Bucket) => void
 }
 
-const BucketList = ({ latestBucket, onBucketSelect }: BucketListProps) => {
+export type BucketListRef = {
+    addBucket: (newBucket: Bucket) => void
+}
+
+const BucketList = forwardRef<BucketListRef, BucketListProps>(({ onBucketSelect }, ref) => {
     const [buckets, setBuckets] = useState<Bucket[]>()
     const { user } = useContext(UserContext)
 
     useEffect(() => {
-        if (buckets && latestBucket && buckets.some(b => b.id === latestBucket.id)) {
-            setBuckets([...buckets, latestBucket]) // Optimitic UI
-        }
-        fetchBuckets()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [latestBucket])
+        fetchBuckets(true)
+    }, [])
 
-    const fetchBuckets = async () => {
+    useImperativeHandle(ref, () => ({ addBucket }));
+
+    const addBucket = (newBucket: Bucket) => {
+        if (buckets && !buckets.find(b => b.id === newBucket.id)) {
+            setBuckets([...buckets, newBucket]) // Optimitic UI
+            fetchBuckets(false, newBucket.id)
+        }
+    }
+
+    const fetchBuckets = async (isFirstCall?: boolean, forceSelectId?: number) => {
         const response = await superagent.get(`${URL}/users/${user!.uuid}/buckets`)
             .set("Authorization", user!.token)
             .send()
@@ -35,8 +42,16 @@ const BucketList = ({ latestBucket, onBucketSelect }: BucketListProps) => {
         if (apiResponse.data) {
             const result = apiResponse.data.buckets
             setBuckets(result)
-            if (result.length > 0 && latestBucket && latestBucket.id !== result[0].id) {
-                onBucketSelect(result[0])
+            if (result.length > 0) {
+                if (isFirstCall) {
+                    return onBucketSelect(result[0])
+                }
+                const bucket = forceSelectId
+                        ? result.find((b) => b.id === forceSelectId)
+                        : undefined
+                if (bucket) {
+                    onBucketSelect(bucket)
+                }
             }
         } else {
             setBuckets([])
@@ -65,6 +80,6 @@ const BucketList = ({ latestBucket, onBucketSelect }: BucketListProps) => {
             {buildBuckets()}
         </Menu>
     )
-}
+})
 
 export default BucketList

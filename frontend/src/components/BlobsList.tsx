@@ -61,23 +61,29 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
         }
     }
 
+    const renderList = (): React.ReactNode => {
+        if (blobs === undefined) {
+            return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Spin />
+            </div>
+        }
+        if (blobs.length === 0) {
+            return <p>No blobs found in this bucket</p>
+        }
+        return <Row gutter={[16, 16]}>
+            {blobs.map((b) => (
+                <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
+                    <Card hoverable onClick={_ => downloadFile(b)}>
+                        <Card.Meta title={b.name} description={displaySize(b.size)} />
+                    </Card>
+                </Col>
+            ))}
+        </Row>
+    }
+
     return (
         <div style={{ padding: 16 }}>
-            {blobs !== undefined ? (
-                <Row gutter={[16, 16]}>
-                    {blobs.map((b) => (
-                        <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
-                            <Card hoverable onClick={_ => downloadFile(b)}>
-                                <Card.Meta title={b.name} description={displaySize(b.size)} />
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
-            ) : (
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Spin />
-                    </div>
-                )}
+            {renderList()}
             < Divider />
 
             <Upload

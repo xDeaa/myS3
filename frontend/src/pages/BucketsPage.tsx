@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import BucketList from '../components/BucketList'
+import React, { useState, useRef } from 'react'
+import BucketList, { BucketListRef } from '../components/BucketList'
 import PageContent from '../components/PageContent'
 import { Col, Row } from 'antd'
 import BlobsList from '../components/BlobsList'
@@ -15,13 +15,20 @@ const breadcrumbPages = [
 
 const BucketsPage = () => {
     const [currentBucket, setCurrentBucket] = useState<Bucket>()
+    const bucketListRef = useRef<BucketListRef>(null);
+
+    const onNewBucket = (newBucket: Bucket) => {
+        if (bucketListRef && bucketListRef.current) {
+            bucketListRef.current.addBucket(newBucket)
+        }
+    }
 
     return (
         <PageContent title="Buckets" breadcrumbPages={breadcrumbPages}>
-            <AddNewBucketForm onNewBucket={setCurrentBucket} />
+            <AddNewBucketForm onNewBucket={onNewBucket} />
             <Row>
                 <Col span={6}>
-                    <BucketList onBucketSelect={setCurrentBucket} latestBucket={currentBucket} />
+                    <BucketList ref={bucketListRef} onBucketSelect={setCurrentBucket} />
                 </Col>
                 <Col span={18}>
                     {currentBucket && <BlobsList bucket={currentBucket} />}

@@ -14,11 +14,9 @@ interface AddNewBucketValues {
     bucketname: string
 }
 
-type OnBucketSelect = (bucket: Bucket) => void;
-
 interface AddNewBucketFormProps extends FormComponentProps {
     form: WrappedFormUtils<AddNewBucketValues>
-    onNewBucket: OnBucketSelect
+    onNewBucket: (bucket: Bucket) => void
 }
 
 const AddNewBucketForm: React.FC<AddNewBucketFormProps> = ({ form, onNewBucket }) => {

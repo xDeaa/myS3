@@ -10,8 +10,21 @@ const UserContext = React.createContext<UserContextProps>({
     setUser: (_) => { }
 })
 
-export const UserProvider: React.FC = ({ children }) => {
-    const [user, setUser] = useState<User | undefined>()
+type UserProviderProps = {
+    userInStorage?: User
+}
+
+export const UserProvider: React.FC<UserProviderProps> = ({ userInStorage, children }) => {
+    const [user, setUserState] = useState<User | undefined>(userInStorage)
+
+    const setUser = (user?: User) => {
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user))
+        } else {
+            localStorage.removeItem('user')
+        }
+        setUserState(user)
+    }
 
     return (
         <UserContext.Provider value={{ user, setUser }}>

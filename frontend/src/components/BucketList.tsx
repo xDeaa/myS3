@@ -21,6 +21,7 @@ const BucketList = forwardRef<BucketListRef, BucketListProps>(({ onBucketSelect 
 
     useEffect(() => {
         fetchBuckets(true)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useImperativeHandle(ref, () => ({ addBucket }));

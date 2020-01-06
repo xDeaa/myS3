@@ -45,8 +45,19 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
         setBlobs([])
     }
 
-    const downloadFile = (blob: Blob) => {
-        // TODO: Call api to download file
+    const downloadFile = async (blob: Blob) => {
+        const response = await fetch(
+            `${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs/${blob.id}/download`,
+            {
+                method: "GET",
+                headers: { "Authorization": user!.token }
+            }
+        )
+        const blobResponse = await response.blob()
+        let a = document.createElement('a');
+        a.href = window.URL.createObjectURL(blobResponse);
+        a.download = blob.name;
+        a.click();
     }
 
     const handleChange = ({ fileList, file }: UploadChangeParam) => {

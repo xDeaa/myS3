@@ -66,6 +66,7 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
     }
 
     const deleteFile = async (blob: Blob) => {
+        setBlobs(blobs?.filter((b) => b.id !== blob.id))
         const response = await superagent
             .delete(`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs/${blob.id}`)
             .ok(() => true)
@@ -82,8 +83,9 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
 
     const duplicateFile = async (blob: Blob) => {
         if (blobs) {
-            // TODO: Clone and remove blob id
-            setBlobs([...blobs, blob])
+            const tempBlob: Blob = { ...blob }
+            tempBlob.id = undefined;
+            setBlobs([...blobs, tempBlob])
         }
         const response = await superagent
             .post(`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs/${blob.id}/duplicate`)
@@ -126,11 +128,11 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
                 <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
                     <Card
                         hoverable
-                        actions={[
+                        actions={b.id !== undefined ? [
                             <Icon type="download" key="download" onClick={(_) => downloadFile(b)} />,
                             <Icon type="copy" key="duplicate" onClick={(_) => duplicateFile(b)} />,
                             <Icon type="delete" key="delete" onClick={(_) => deleteFile(b)} />
-                        ]}
+                        ] : []}
                     >
                         <Card.Meta title={b.name} description={displaySize(b.size)} />
                     </Card>

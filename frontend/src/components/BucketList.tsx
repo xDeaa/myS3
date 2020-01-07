@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useImperativeHandle, forwardRef } from 'react'
-import { Menu, Spin, } from 'antd'
+import { Menu, Spin, Empty } from 'antd'
 import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
 import { URL } from '../api/data';
@@ -48,8 +48,8 @@ const BucketList = forwardRef<BucketListRef, BucketListProps>(({ onBucketSelect 
                     return onBucketSelect(result[0])
                 }
                 const bucket = forceSelectId
-                        ? result.find((b) => b.id === forceSelectId)
-                        : undefined
+                    ? result.find((b) => b.id === forceSelectId)
+                    : undefined
                 if (bucket) {
                     onBucketSelect(bucket)
                 }
@@ -62,7 +62,7 @@ const BucketList = forwardRef<BucketListRef, BucketListProps>(({ onBucketSelect 
     const buildBuckets = () => {
         if (!buckets) return <></>
         if (buckets.length === 0) {
-            return <p>Empty bucket list :/</p>
+            return <Empty />
         }
         return buckets.map((e) => <Menu.Item key={e.id} onClick={_ => onBucketSelect(e)}>{e.name}</Menu.Item>)
     }

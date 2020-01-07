@@ -1,5 +1,5 @@
 export default interface Blob {
-    id: number;
+    id?: number;
     size: number;
     name: string;
     path: string;

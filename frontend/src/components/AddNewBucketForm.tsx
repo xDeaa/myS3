@@ -20,21 +20,26 @@ interface AddNewBucketFormProps extends FormComponentProps {
 }
 
 const AddNewBucketForm: React.FC<AddNewBucketFormProps> = ({ form, onNewBucket }) => {
-    const { getFieldDecorator, getFieldError, isFieldTouched } = form;
+    const { getFieldDecorator, getFieldError, setFields, isFieldTouched } = form;
     const [error, setError] = useState<ErrorApi>()
+    const [isLoading, setLoading] = useState<boolean>(false)
     const { user } = useContext(UserContext)
 
     const addNewBucket = async (name: string): Promise<void> => {
+        setLoading(true)
+        
         const response = await superagent
-            .post(`${URL}/users/${user!.uuid}/buckets`)
-            .set("Authorization", user!.token)
-            .ok(() => true)
-            .send({ name })
-
+        .post(`${URL}/users/${user!.uuid}/buckets`)
+        .set("Authorization", user!.token)
+        .ok(() => true)
+        .send({ name })
+        
         const apiResponse = response.body as ResponseApi<BucketResponse>;
-
+        
+        setLoading(false)
         if (apiResponse.data) {
             setError(undefined);
+            setFields({ 'bucketname': '' })
             onNewBucket(apiResponse.data.bucket)
         } else {
             setError(apiResponse.error)
@@ -67,7 +72,7 @@ const AddNewBucketForm: React.FC<AddNewBucketFormProps> = ({ form, onNewBucket }
                 )}
             </Form.Item>
             <Form.Item>
-                <Button type="primary" htmlType="submit">Add</Button>
+                <Button type="primary" htmlType="submit" loading={isLoading}>Add</Button>
             </Form.Item>
         </Form>
     );

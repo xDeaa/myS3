@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Upload, Icon, Button, message, Divider, Card, Row, Col, Spin } from "antd";
+import { Upload, Icon, Button, message, Divider, Card, Row, Col, Spin, Empty } from "antd";
 import { UploadChangeParam } from 'antd/lib/upload/interface';
 import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
@@ -8,6 +8,11 @@ import { URL } from '../api/data';
 import UserContext from '../contexts/UserContext';
 import ResponseApi from '../api/models/ResponseApi';
 import BlobsResponse from '../api/response/BlobsResponse';
+import BlobResponse from '../api/response/BlobResponse';
+
+interface DeleteResponse {
+    msg: string
+}
 
 type BlobsListProps = {
     bucket: Bucket
@@ -60,6 +65,41 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
         a.click();
     }
 
+    const deleteFile = async (blob: Blob) => {
+        const response = await superagent
+            .delete(`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs/${blob.id}`)
+            .ok(() => true)
+            .set("Authorization", user!.token)
+            .send()
+        const responseApi = response.body as ResponseApi<DeleteResponse>
+        if (responseApi.data) {
+            message.success(responseApi.data.msg);
+            fetchBlobs(false)
+        } else {
+            message.error(responseApi.error?.message ?? "Unknown error");
+        }
+    }
+
+    const duplicateFile = async (blob: Blob) => {
+        if (blobs) {
+            // TODO: Clone and remove blob id
+            setBlobs([...blobs, blob])
+        }
+        const response = await superagent
+            .post(`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs/${blob.id}/duplicate`)
+            .ok(() => true)
+            .set("Authorization", user!.token)
+            .send()
+
+        const responseApi = response.body as ResponseApi<BlobResponse>
+        if (responseApi.data) {
+            message.success(`Blob duplicate: "${responseApi.data.blob.name}" added`);
+            fetchBlobs(false)
+        } else {
+            message.error(responseApi.error?.message ?? "Unknown error");
+        }
+    }
+
     const handleChange = ({ fileList, file }: UploadChangeParam) => {
         if (file.status !== 'uploading') {
             console.log(file, fileList);
@@ -79,12 +119,19 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
             </div>
         }
         if (blobs.length === 0) {
-            return <p>No blobs found in this bucket</p>
+            return <Empty />
         }
         return <Row gutter={[16, 16]}>
             {blobs.map((b) => (
                 <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
-                    <Card hoverable onClick={_ => downloadFile(b)}>
+                    <Card
+                        hoverable
+                        actions={[
+                            <Icon type="download" key="download" onClick={(_) => downloadFile(b)} />,
+                            <Icon type="copy" key="duplicate" onClick={(_) => duplicateFile(b)} />,
+                            <Icon type="delete" key="delete" onClick={(_) => deleteFile(b)} />
+                        ]}
+                    >
                         <Card.Meta title={b.name} description={displaySize(b.size)} />
                     </Card>
                 </Col>
@@ -104,10 +151,13 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
                 name="blob"
                 listType="text"
                 onChange={handleChange}
+                showUploadList={{
+                    showPreviewIcon: false,
+                    showRemoveIcon: false,
+                    showDownloadIcon: false
+                }}
             >
-                <Button>
-                    <Icon type="upload" /> Click to Upload
-                </Button>
+                <Button><Icon type="upload" /> Click to Upload</Button>
             </Upload>
         </div>
     );

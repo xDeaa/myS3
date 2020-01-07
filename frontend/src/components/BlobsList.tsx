@@ -9,10 +9,7 @@ import UserContext from '../contexts/UserContext';
 import ResponseApi from '../api/models/ResponseApi';
 import BlobsResponse from '../api/response/BlobsResponse';
 import BlobResponse from '../api/response/BlobResponse';
-
-interface DeleteResponse {
-    msg: string
-}
+import DeleteResponse from '../api/response/DeleteResponse';
 
 type BlobsListProps = {
     bucket: Bucket
@@ -129,9 +126,9 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
                     <Card
                         hoverable
                         actions={b.id !== undefined ? [
-                            <Icon type="download" key="download" onClick={(_) => downloadFile(b)} />,
-                            <Icon type="copy" key="duplicate" onClick={(_) => duplicateFile(b)} />,
-                            <Icon type="delete" key="delete" onClick={(_) => deleteFile(b)} />
+                            <Icon type="download" title="Download file" onClick={(_) => downloadFile(b)} />,
+                            <Icon type="copy" theme="twoTone" title="Duplicate file" onClick={(_) => duplicateFile(b)} />,
+                            <Icon type="delete" theme="twoTone" twoToneColor="#eb2f96" title="Delete file" onClick={(_) => deleteFile(b)} />
                         ] : []}
                     >
                         <Card.Meta title={b.name} description={displaySize(b.size)} />
@@ -142,7 +139,7 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
     }
 
     return (
-        <div style={{ padding: 16 }}>
+        <>
             {renderList()}
             < Divider />
 
@@ -161,7 +158,7 @@ const BlobsList = ({ bucket }: BlobsListProps) => {
             >
                 <Button><Icon type="upload" /> Click to Upload</Button>
             </Upload>
-        </div>
+        </>
     );
 }
 

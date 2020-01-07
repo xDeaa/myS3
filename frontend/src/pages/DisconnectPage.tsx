@@ -12,14 +12,9 @@ const DisconnectPage = () => {
             userContext.setUser(undefined)
             history.push('/')
         }, 1500)
-    }, [])
+    })
 
-    return (
-        <Result
-            icon={<Spin />}
-            title="Disconnecting..."
-        />
-    )
+    return <Result icon={<Spin />} title="Disconnecting..." />
 }
 
 export default DisconnectPage

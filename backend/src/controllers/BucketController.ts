@@ -47,7 +47,7 @@ export default class BucketController {
             newBucket.name = req.body.name
             newBucket.user = req.attributes.user
 
-            const bucket: BucketService = await BucketService.saveBucket(
+            const bucket: Bucket = await BucketService.saveBucket(
                 newBucket,
             )
 

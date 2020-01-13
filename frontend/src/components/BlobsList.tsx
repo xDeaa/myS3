@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { Upload, Icon, Button, message, Divider, Card, Row, Col, Spin } from "antd";
+import React, { useState, useEffect, useContext } from 'react'
+import { Upload, Icon, Button, message, Divider, Card, Row, Col, Spin, Empty } from "antd";
 import { UploadChangeParam } from 'antd/lib/upload/interface';
 import superagent from 'superagent'
 import Bucket from '../api/models/Bucket';
-import BlobModel from '../api/models/Blob';
-import { URL, APIKEY } from '../api/data';
-import User from '../api/models/User';
+import Blob from '../api/models/Blob';
+import { URL } from '../api/data';
+import UserContext from '../contexts/UserContext';
+import ResponseApi from '../api/models/ResponseApi';
+import BlobsResponse from '../api/response/BlobsResponse';
+import BlobResponse from '../api/response/BlobResponse';
+import DeleteResponse from '../api/response/DeleteResponse';
 
 type BlobsListProps = {
     bucket: Bucket
-    user: User
 }
 
 // TODO: Add to a util function
@@ -18,29 +21,82 @@ const displaySize = (size: number): string => {
     return `${(size / Math.pow(1024, i)).toFixed(2)} ${['B', 'kB', 'MB', 'GB', 'TB'][i]}`;
 }
 
-const BlobsList = ({ bucket, user }: BlobsListProps) => {
-    const [blobs, setBlobs] = useState<BlobModel[] | null>()
+const BlobsList = ({ bucket }: BlobsListProps) => {
+    const [blobs, setBlobs] = useState<Blob[]>()
+    const { user } = useContext(UserContext)
 
     useEffect(() => {
         fetchBlobs(true)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bucket])
 
-    const fetchBlobs = async (resetBlobs: boolean) => {
+    const fetchBlobs = async (resetBlobs: boolean): Promise<void> => {
         if (resetBlobs) {
-            setBlobs(null)
+            setBlobs(undefined)
         }
-        // TODO: Call api
-        // Simulate api call
-        const response = await superagent.get(`${URL}/users/${user.uuid}/buckets/${bucket.id}/blobs`)
-            .set("Authorization", user.token)
+        const response = await superagent.get(`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs`)
+            .set("Authorization", user!.token)
+            .ok(() => true)
             .send()
 
-        const result: BlobModel[] = response.body.data.blobs
-        setBlobs(result)
+        const apiResponse = response.body as ResponseApi<BlobsResponse>
+        if (apiResponse.data) {
+            setBlobs(apiResponse.data.blobs)
+            return
+        }
+        setBlobs([])
     }
 
-    const downloadFile = (blob: BlobModel) => {
-        // TODO: Call api to download file
+    const downloadFile = async (blob: Blob) => {
+        const response = await fetch(
+            `${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs/${blob.id}/download`,
+            {
+                method: "GET",
+                headers: { "Authorization": user!.token }
+            }
+        )
+        const blobResponse = await response.blob()
+        let a = document.createElement('a');
+        a.href = window.URL.createObjectURL(blobResponse);
+        a.download = blob.name;
+        a.click();
+    }
+
+    const deleteFile = async (blob: Blob) => {
+        setBlobs(blobs?.filter((b) => b.id !== blob.id))
+        const response = await superagent
+            .delete(`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs/${blob.id}`)
+            .ok(() => true)
+            .set("Authorization", user!.token)
+            .send()
+        const responseApi = response.body as ResponseApi<DeleteResponse>
+        if (responseApi.data) {
+            message.success(responseApi.data.msg);
+            fetchBlobs(false)
+        } else {
+            message.error(responseApi.error?.message ?? "Unknown error");
+        }
+    }
+
+    const duplicateFile = async (blob: Blob) => {
+        if (blobs) {
+            const tempBlob: Blob = { ...blob }
+            tempBlob.id = undefined;
+            setBlobs([...blobs, tempBlob])
+        }
+        const response = await superagent
+            .post(`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs/${blob.id}/duplicate`)
+            .ok(() => true)
+            .set("Authorization", user!.token)
+            .send()
+
+        const responseApi = response.body as ResponseApi<BlobResponse>
+        if (responseApi.data) {
+            message.success(`Blob duplicate: "${responseApi.data.blob.name}" added`);
+            fetchBlobs(false)
+        } else {
+            message.error(responseApi.error?.message ?? "Unknown error");
+        }
     }
 
     const handleChange = ({ fileList, file }: UploadChangeParam) => {
@@ -55,39 +111,54 @@ const BlobsList = ({ bucket, user }: BlobsListProps) => {
         }
     }
 
-    return (
-        <div style={{ padding: 16 }}>
-            {blobs ? (
-                <Row gutter={[16, 16]}>
-                    {blobs.map((b) => (
-                        <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
-                            <Card hoverable onClick={_ => downloadFile(b)}>
-                                <Card.Meta title={b.name} description={displaySize(b.size)} />
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
-            ) : (
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <Spin />
-                    </div>
-                )}
+    const renderList = (): React.ReactNode => {
+        if (blobs === undefined) {
+            return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Spin />
+            </div>
+        }
+        if (blobs.length === 0) {
+            return <Empty />
+        }
+        return <Row gutter={[16, 16]}>
+            {blobs.map((b) => (
+                <Col xs={24} sm={12} md={8} lg={6} xxl={4}>
+                    <Card
+                        hoverable
+                        actions={b.id !== undefined ? [
+                            <Icon type="download" title="Download file" onClick={(_) => downloadFile(b)} />,
+                            <Icon type="copy" theme="twoTone" title="Duplicate file" onClick={(_) => duplicateFile(b)} />,
+                            <Icon type="delete" theme="twoTone" twoToneColor="#eb2f96" title="Delete file" onClick={(_) => deleteFile(b)} />
+                        ] : []}
+                    >
+                        <Card.Meta title={b.name} description={displaySize(b.size)} />
+                    </Card>
+                </Col>
+            ))}
+        </Row>
+    }
 
+    return (
+        <>
+            {renderList()}
             < Divider />
 
             <Upload
                 method="post"
-                action={`${URL}/users/${user.uuid}/buckets/${bucket.id}/blobs`}
-                headers={{ "Authorization": user.token }}
+                action={`${URL}/users/${user!.uuid}/buckets/${bucket.id}/blobs`}
+                headers={{ "Authorization": user!.token }}
                 name="blob"
                 listType="text"
                 onChange={handleChange}
+                showUploadList={{
+                    showPreviewIcon: false,
+                    showRemoveIcon: false,
+                    showDownloadIcon: false
+                }}
             >
-                <Button>
-                    <Icon type="upload" /> Click to Upload
-                </Button>
+                <Button><Icon type="upload" /> Click to Upload</Button>
             </Upload>
-        </div>
+        </>
     );
 }
 

@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryColumn, OneToMany } from 'typeorm'
-import { Bucket } from '.'
+import { Bucket, ForgetPassword } from '.'
 
 @Entity('user')
 export default class User {
@@ -35,6 +35,12 @@ export default class User {
         bucket => bucket.user,
     )
     buckets: Bucket[]
+
+    @OneToMany(
+        () => ForgetPassword,
+        forgetpass => forgetpass.user,
+    )
+    forgetpass: ForgetPassword[]
 
     toJSON = (): object => {
         return {

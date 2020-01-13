@@ -2,6 +2,7 @@ import UserValidation from './UserValidation'
 import BucketValidation from './BucketValidation'
 import AuthValidation from './AuthValidation'
 import BlobValidation from './BlobValidation'
+import ForgetPassValidation from './ForgetPassValidation'
 import Validation from './Validation'
 
 export {
@@ -9,6 +10,7 @@ export {
     BucketValidation,
     AuthValidation,
     BlobValidation,
+    ForgetPassValidation,
     Validation,
 }
 
@@ -17,5 +19,6 @@ export default {
     BucketValidation,
     AuthValidation,
     BlobValidation,
+    ForgetPassValidation,
     Validation,
 }

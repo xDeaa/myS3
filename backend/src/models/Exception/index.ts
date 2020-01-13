@@ -4,6 +4,7 @@ import UserNotExistsException from './UserNotExistsException'
 import BucketNotExistsException from './BucketNotExistsException'
 import AlreadyBucketExistsException from './AlreadyBucketExistsException'
 import EmailOrPasswordWrongException from './EmailOrPasswordWrongException'
+import ForgetPassTokenNotExistsException from './ForgetPassTokenNotExistsException'
 import UnAuthorizedException from './UnAuthorizedException'
 import AlreadyConnectedException from './AlreadyConnectedException'
 import BlobNotExistsException from './BlobNotExistsException'
@@ -17,6 +18,7 @@ export {
     BucketNotExistsException,
     AlreadyBucketExistsException,
     EmailOrPasswordWrongException,
+    ForgetPassTokenNotExistsException,
     UnAuthorizedException,
     AlreadyConnectedException,
     BlobNotExistsException,

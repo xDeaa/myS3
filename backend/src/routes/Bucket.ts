@@ -29,6 +29,7 @@ class BucketRoutes extends BaseRoute {
             checkBucketExists,
             BucketController.updateBucket,
         )
+        
         this.router.delete(
             '/:id',
             BucketValidation.BucketParameter,

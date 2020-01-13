@@ -14,7 +14,7 @@ import {
 } from '../models/Exception'
 
 export const handleBaseMiddleware = (router: Router): void => {
-    router.use(cors());
+    router.use(cors())
     // Handle body request parsing
     router.use(parser.urlencoded({ extended: true }), parser.json())
 

@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 import User from './User.entity'
 
-@Entity('forget_password')
-export default class ForgetPassword {
+@Entity('forgot_password')
+export default class ForgotPassword {
     @PrimaryGeneratedColumn()
     id: number
     

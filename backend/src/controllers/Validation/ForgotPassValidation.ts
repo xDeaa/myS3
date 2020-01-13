@@ -1,7 +1,7 @@
 import { checkSchema, ValidationChain } from 'express-validator'
 
-export default class ForgetPassValidation {
-    public static CheckForget: ValidationChain[] = checkSchema({
+export default class ForgotPassValidation {
+    public static CheckForgot: ValidationChain[] = checkSchema({
         token: {
             in: ['query'],
             errorMessage: 'token provided is not valid',
@@ -14,7 +14,7 @@ export default class ForgetPassValidation {
         },
     })
 
-    public static CreateForget: ValidationChain[] = checkSchema({
+    public static CreateForgot: ValidationChain[] = checkSchema({
         email: {
             in: ['body'],
             errorMessage: 'email provided is not valid',

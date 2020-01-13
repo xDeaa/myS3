@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { ForgetPassword, User } from '../entities';
+import { ForgotPassword, User } from '../entities';
 
 export default class MailService {
     /**
@@ -54,19 +54,19 @@ export default class MailService {
     }
 
     /**
-     * Send user forget password email
+     * Send user forgot password email
      */
-    public static sendUserForgetPassword(
+    public static sendUserForgotPassword(
         user: User,
-        forgetPass: ForgetPassword
+        forgotPass: ForgotPassword
     ): Promise<boolean> {
         return MailService.sendEmail(
             user.email,
-            'Forget password',
+            'Forgot password',
             `
             Hello, ${user.nickname} !
 
-            It's seem that you forgot your password, to reset it follow this link: http://localhost/forget_password?token=${forgetPass.token}
+            It's seem that you forgot your password, to reset it follow this link: http://localhost/forgot_password?token=${forgotPass.token}
             `,
         )
     }

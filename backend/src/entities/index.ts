@@ -1,13 +1,13 @@
 import User from './User.entity'
 import Bucket from './Bucket.entity'
 import Blob from './Blob.entity'
-import ForgetPassword from './ForgetPassword.entity'
+import ForgotPassword from './ForgotPassword.entity'
 
-export { User, Bucket, Blob, ForgetPassword }
+export { User, Bucket, Blob, ForgotPassword }
 
 export default {
     User,
     Bucket,
     Blob,
-    ForgetPassword
+    ForgotPassword
 }

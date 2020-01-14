@@ -17,8 +17,6 @@
     - Use Hook/Context with React
 
 ### Feature to do :
-#### BACK :
-    - Add user password reset e-mail workflow
 
 #### FRONT :
     - HAVE TO transform you application to handle Server-side Rendering (SSR)

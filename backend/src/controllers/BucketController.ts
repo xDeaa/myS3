@@ -47,9 +47,7 @@ export default class BucketController {
             newBucket.name = req.body.name
             newBucket.user = req.attributes.user
 
-            const bucket: Bucket = await BucketService.saveBucket(
-                newBucket,
-            )
+            const bucket: Bucket = await BucketService.saveBucket(newBucket)
 
             return new ResponseData(200, { bucket }).sendJson(res)
         } catch (e) {

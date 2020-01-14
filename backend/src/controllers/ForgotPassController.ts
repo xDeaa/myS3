@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 import { ResponseData } from '../models'
 import { ForgotPassService, UserService, MailService } from '../services'
-import { UserNotExistsException, ForgotPassTokenNotExistsException } from '../models/Exception'
+import {
+    UserNotExistsException,
+    ForgotPassTokenNotExistsException,
+} from '../models/Exception'
 import { hashPassword } from '../utils/Utils'
 
 export default class ForgotPassController {
@@ -11,7 +14,7 @@ export default class ForgotPassController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { token } = req.query;
+            const { token } = req.query
             const forgotPass = await ForgotPassService.findForgotToken(token)
             if (!forgotPass) {
                 throw new ForgotPassTokenNotExistsException()
@@ -28,13 +31,16 @@ export default class ForgotPassController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { email } = req.body;
-            const user = await UserService.getUserEmail(email);
+            const { email } = req.body
+            const user = await UserService.getUserEmail(email)
             if (!user) {
                 throw new UserNotExistsException()
             }
             const forgotPass = await ForgotPassService.createForgot(user)
-            const emailSended = await MailService.sendUserForgotPassword(user, forgotPass);
+            const emailSended = await MailService.sendUserForgotPassword(
+                user,
+                forgotPass,
+            )
             return new ResponseData(200, { emailSended }).sendJson(res)
         } catch (e) {
             next(e)
@@ -47,7 +53,7 @@ export default class ForgotPassController {
         next: NextFunction,
     ): Promise<void> => {
         try {
-            const { token, password } = req.body;
+            const { token, password } = req.body
             const forgotPass = await ForgotPassService.findForgotToken(token)
 
             if (!forgotPass) {
@@ -58,10 +64,10 @@ export default class ForgotPassController {
             userToUpdate.password = await hashPassword(password)
 
             const userUpdated = await UserService.updateUser(userToUpdate)
-            await MailService.sendUserPasswordUpdated(userUpdated);
+            await MailService.sendUserPasswordUpdated(userUpdated)
 
             await ForgotPassService.deleteForgot(forgotPass.id)
-            return new ResponseData(200, { isOk: true}).sendJson(res)
+            return new ResponseData(200, { isOk: true }).sendJson(res)
         } catch (e) {
             next(e)
         }

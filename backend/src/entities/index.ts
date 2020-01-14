@@ -9,5 +9,5 @@ export default {
     User,
     Bucket,
     Blob,
-    ForgotPassword
+    ForgotPassword,
 }

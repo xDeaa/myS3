@@ -5,7 +5,7 @@ import User from './User.entity'
 export default class ForgotPassword {
     @PrimaryGeneratedColumn()
     id: number
-    
+
     @ManyToOne(
         () => User,
         user => user.uuid,

@@ -5,4 +5,11 @@ import MailService from './MailService'
 import BaseService from './BaseService'
 import ForgotPassService from './ForgotPassService'
 
-export { UserService, MailService, BucketService, BlobService, BaseService, ForgotPassService }
+export {
+    UserService,
+    MailService,
+    BucketService,
+    BlobService,
+    BaseService,
+    ForgotPassService,
+}

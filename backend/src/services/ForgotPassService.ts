@@ -1,17 +1,19 @@
 import { getRepository } from 'typeorm'
 import { User, ForgotPassword } from '../entities'
-import uuid from 'uuid';
+import uuid from 'uuid'
 
 export default class ForgotPassService {
     /**
      * Find a forgot password object from token
      * @param token Token to search
      */
-    public static findForgotToken(token: string): Promise<ForgotPassword | undefined> {
+    public static findForgotToken(
+        token: string,
+    ): Promise<ForgotPassword | undefined> {
         return getRepository(ForgotPassword).findOne({
             where: { token },
-            relations: ['user']
-        });
+            relations: ['user'],
+        })
     }
 
     /**
@@ -21,15 +23,15 @@ export default class ForgotPassService {
     public static createForgot(user: User): Promise<ForgotPassword> {
         return getRepository(ForgotPassword).save({
             user: user,
-            token: uuid.v4()
+            token: uuid.v4(),
         })
     }
 
     /**
      * Delete token
-     * @param id Id of forgot password 
+     * @param id Id of forgot password
      */
     public static async deleteForgot(id: number): Promise<void> {
-        await getRepository(ForgotPassword).delete(id);
+        await getRepository(ForgotPassword).delete(id)
     }
 }

@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { ForgotPassword, User } from '../entities';
+import { ForgotPassword, User } from '../entities'
 
 export default class MailService {
     /**
@@ -12,7 +12,7 @@ export default class MailService {
     ): Promise<boolean> {
         const { EMAIL_USER, EMAIL_PASSWORD } = process.env
         if (!EMAIL_USER || !EMAIL_PASSWORD) {
-            return false;
+            return false
         }
         // create reusable transporter object using the default SMTP transport
         const transporter = nodemailer.createTransport({
@@ -21,7 +21,7 @@ export default class MailService {
             secure: true, // true for 465, false for other ports
             auth: {
                 user: EMAIL_USER,
-                pass: EMAIL_PASSWORD
+                pass: EMAIL_PASSWORD,
             },
         })
 
@@ -58,7 +58,7 @@ export default class MailService {
      */
     public static sendUserForgotPassword(
         user: User,
-        forgotPass: ForgotPassword
+        forgotPass: ForgotPassword,
     ): Promise<boolean> {
         return MailService.sendEmail(
             user.email,

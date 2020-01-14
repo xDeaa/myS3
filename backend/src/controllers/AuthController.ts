@@ -52,7 +52,7 @@ export default class AuthController {
             if (!user) {
                 throw new EmailOrPasswordWrongException()
             }
-            const isPasswordOk = await verifiyPassword(password, user.password);
+            const isPasswordOk = await verifiyPassword(password, user.password)
             if (!isPasswordOk) {
                 throw new EmailOrPasswordWrongException()
             }

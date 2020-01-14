@@ -5,10 +5,11 @@ import ForgotPassController from '../controllers/ForgotPassController'
 
 class ForgotPasswordRoutes extends BaseRoute {
     public initializeRoutes(): void {
-        this.router.get('/',
+        this.router.get(
+            '/',
             ForgotPassValidation.CheckForgot,
             handleError,
-            ForgotPassController.checkForgotToken
+            ForgotPassController.checkForgotToken,
         )
 
         this.router.post(

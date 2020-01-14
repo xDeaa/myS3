@@ -8,9 +8,9 @@ export default class ForgotPassValidation {
             isString: true,
             isLength: {
                 options: {
-                    min: 1
-                }
-            }
+                    min: 1,
+                },
+            },
         },
     })
 
@@ -29,9 +29,9 @@ export default class ForgotPassValidation {
             isString: true,
             isLength: {
                 options: {
-                    min: 1
-                }
-            }
+                    min: 1,
+                },
+            },
         },
         password: {
             in: ['body'],

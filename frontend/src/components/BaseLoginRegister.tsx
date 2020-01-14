@@ -62,7 +62,7 @@ const BaseLoginRegister: React.FC<BaseLoginRegisterProps> = (props) => {
 
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
-            <Form onSubmit={handleSubmit} style={{ maxWidth: 300 }}>
+            <Form onSubmit={handleSubmit} style={{ minWidth: 300 }}>
                 <ErrorMsg error={error} />
                 {props.children}
             </Form>

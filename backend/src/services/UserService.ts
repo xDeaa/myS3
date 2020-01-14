@@ -71,13 +71,7 @@ export default class UserService {
      * Find a specific user with email
      * @param email Email of the user to retrieve
      */
-    public static async getUserEmail(email: string): Promise<User> {
-        const userFound = await getRepository(User).findOne({ email })
-
-        if (!userFound) {
-            throw new EmailOrPasswordWrongException()
-        }
-
-        return userFound
+    public static getUserEmail(email: string): Promise<User | undefined> {
+        return getRepository(User).findOne({ email })
     }
 }

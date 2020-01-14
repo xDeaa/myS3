@@ -48,8 +48,12 @@ export default class AuthController {
         try {
             const { email, password } = req.body
 
-            const user: User = await UserService.getUserEmail(email)
-            if (!(await verifiyPassword(password, user.password))) {
+            const user = await UserService.getUserEmail(email)
+            if (!user) {
+                throw new EmailOrPasswordWrongException()
+            }
+            const isPasswordOk = await verifiyPassword(password, user.password)
+            if (!isPasswordOk) {
                 throw new EmailOrPasswordWrongException()
             }
 

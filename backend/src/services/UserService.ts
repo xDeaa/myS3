@@ -2,8 +2,7 @@ import { getRepository } from 'typeorm'
 import { User } from '../entities'
 import {
     AlreadyUserExistsException,
-    UserNotExistsException,
-    EmailOrPasswordWrongException,
+    UserNotExistsException
 } from '../models/Exception'
 import { BaseService } from '.'
 
